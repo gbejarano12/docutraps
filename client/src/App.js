@@ -5,6 +5,7 @@ import $ from 'jquery';
 import { Routes, Route, Link } from 'react-router-dom';
 import { ChakraProvider, Box, Flex, Heading, Text, Stack, StackDivider, IconButton } from '@chakra-ui/react';
 import { Cameras, CameraList, CameraDetail } from './view/cameras';
+import { FaBars } from 'react-icons/fa';
 // import "https://survey123.arcgis.com/api/jsapi";
 
 
@@ -56,7 +57,7 @@ class App extends React.Component {
         <Flex className="App" direction='column' minHeight='100vh' width='full'>
           {/* <SurveyForm key='form'/> */}
           <Flex p={3} shadow='sm' alignItems='center'>
-            <IconButton size='md' variant='outline' mr={5} onClick={this.toggleNav} icon={<i >M</i>} display={{base: 'block', lg: 'none'}} />
+            <IconButton size='md' variant='outline' mr={5} onClick={this.toggleNav} icon={<FaBars />} display={{base: 'flex', lg: 'none'}} />
             <Heading as='h5' size='md' color='gray.600'>DocuTraps</Heading>
           </Flex>
           <Flex flex={1} bg='whitesmoke'>
