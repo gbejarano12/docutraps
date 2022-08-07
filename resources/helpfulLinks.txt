@@ -1,0 +1,13 @@
+
+
+Survey123 api
+    https://developers.arcgis.com/survey123/api-reference/web-app
+
+Esri (for maps)
+    https://developers.arcgis.com/javascript/latest/layers-and-data/
+
+Mediavalet api
+    https://docs.mediavalet.com/#ff14892b-ab18-450d-b293-b787859b6b40
+
+Docusign
+    https://developers.docusign.com/docs/
