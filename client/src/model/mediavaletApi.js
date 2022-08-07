@@ -1,5 +1,138 @@
 // API Documentation URL: https://docs.mediavalet.com/#ff14892b-ab18-450d-b293-b787859b6b40
 
+
+//Example API Search result from mediavalet
+let exampleSearchAPIResult = {
+    "apiVersion": "2022.6.17.1",
+    "warnings": [],
+    "errors": [],
+    "payload": {
+        "assetCount": 87,
+        "assets": [
+            {
+                "id": "cc67d0f9-5094-4560-8102-122764e6b725",
+                "title": "IMG_0051",
+                "media": {
+                    "type": "Image",
+                    "small": "https://mvsfservicefabricusva.blob.core.windows.net/medialibrary-03cba27e25e74bc6bb54bc2691d52d1b-r/cc67d0f9509445608102122764e6b725/cc67d0f9509445608102122764e6b725/Small/IMG_0051.jpg?sv=2017-04-17&sr=b&si=202207201809&sig=Eqan2608oqy0xZyioU%2BEPnNg1gJGGKtdigNHSnTvjs4%3D&st=1798-05-11T04%3A04%3A10Z&se=2032-08-06T09%3A29%3A15Z",
+                    "thumb": "https://mvsfservicefabricusva.blob.core.windows.net/medialibrary-03cba27e25e74bc6bb54bc2691d52d1b-r/cc67d0f9509445608102122764e6b725/cc67d0f9509445608102122764e6b725/Thumb/IMG_0051.jpg?sv=2017-04-17&sr=b&si=202207201809&sig=HE%2FYJdbux52JxYrMljqKQlaSiYr3035VWNlqLOeVW9I%3D&st=0280-07-01T10%3A33%3A44Z&se=2032-08-06T09%3A29%3A15Z",
+                    "large": "https://mvsfservicefabricusva.blob.core.windows.net/medialibrary-03cba27e25e74bc6bb54bc2691d52d1b-r/cc67d0f9509445608102122764e6b725/cc67d0f9509445608102122764e6b725/Large/IMG_0051.jpg?sv=2017-04-17&sr=b&si=202207201809&sig=l7wAZPdRRh8pWMIVY3tnu9R%2BhvJqhNo4Rl54D5ZYKOo%3D&st=0918-09-08T09%3A43%3A22Z&se=2032-08-06T09%3A29%3A15Z",
+                    "original": "https://mvsfservicefabricusva.blob.core.windows.net/medialibrary-03cba27e25e74bc6bb54bc2691d52d1b/cc67d0f9509445608102122764e6b725/cc67d0f9509445608102122764e6b725/Original/IMG_0051.JPG?sv=2017-04-17&sr=b&si=202207201809&sig=szQmkw4UiMwmci4X39mwiPUKhCm2KsUFTCPnUe%2FKRHs%3D&st=1347-04-07T16%3A05%3A12Z&se=2032-08-06T09%3A29%3A15Z&rsct=application%2Foctet-stream&rscd=file%3B%20attachment",
+                    "medium": "https://mvsfservicefabricusva.blob.core.windows.net/medialibrary-03cba27e25e74bc6bb54bc2691d52d1b-r/cc67d0f9509445608102122764e6b725/cc67d0f9509445608102122764e6b725/Medium/IMG_0051.jpg?sv=2017-04-17&sr=b&si=202207201809&sig=1g6ulvuYYNKgEIcKQ97rYu%2BAvcRop68c7%2FaD1DcZaAs%3D&st=0353-05-13T18%3A53%3A19Z&se=2032-08-06T09%3A29%3A15Z",
+                    "download": "https://mvsfservicefabricusva.blob.core.windows.net/medialibrary-03cba27e25e74bc6bb54bc2691d52d1b/cc67d0f9509445608102122764e6b725/cc67d0f9509445608102122764e6b725/Original/IMG_0051.JPG?sv=2017-04-17&sr=b&si=202207201809&sig=szQmkw4UiMwmci4X39mwiPUKhCm2KsUFTCPnUe%2FKRHs%3D&st=1347-04-07T16%3A05%3A12Z&se=2032-08-06T09%3A29%3A15Z&rsct=application%2Foctet-stream&rscd=file%3B%20attachment",
+                    "downloadRequest": "downloads/validate",
+                    "originalDimensions": "https://az687986.vo.msecnd.net/img/processingRenditions772x517.png",
+                    "sasExpiry": 315569260000,
+                    "sasRenewal": 0
+                },
+                "file": {
+                    "id": "cc67d0f9-5094-4560-8102-122764e6b725",
+                    "title": "IMG_0051",
+                    "fileName": "IMG_0051.JPG",
+                    "md5": "e099b46eaf61ef0b8ca2717a8b2694a5",
+                    "fileType": "JPG",
+                    "sizeInBytes": 4629420,
+                    "description": "",
+                    "keywords": "",
+                    "uploadedAt": "2022-08-06T18:05:04.043Z",
+                    "modifiedAt": "2022-08-06T18:05:11.074Z",
+                    "approvedAt": "2022-08-06T18:05:04.184Z",
+                    "imageHeight": 3024,
+                    "imageWidth": 5376,
+                    "mimeType": "image/jpeg",
+                    "resolution": "72dpi",
+                    "colorMode": "sRGB",
+                    "orientation": "Landscape"
+                },
+                "description": "",
+                "altText": "",
+                "containerName": "medialibrary-03cba27e-25e7-4bc6-bb54-bc2691d52d1b",
+                "status": 0,
+                "rating": {
+                    "average": 0,
+                    "user": 0
+                },
+                "attributes": {
+                    "63970d4e-6b53-4d31-a9a2-2ad651a560d7": "image/jpeg",
+                    "3fbc5038-a878-4e10-992c-fccc46d430b8": "JPG",
+                    "00c93bf7-7084-463d-921a-9d64aecff8c8": "",
+                    "b6b88766-9245-4f71-bef5-9f690ee5f02d": "3024",
+                    "b9b83ba5-7a70-4900-a89a-3d80b3639f50": "IMG_0051.JPG",
+                    "f50da800-1fa5-4cb9-b337-6fa3a960431d": "4629420",
+                    "063ec16c-fec5-40a8-93f8-72cda2f2170b": "5376",
+                    "04ab384d-9668-4e27-8221-74a46618ad2f": "3024",
+                    "4b1fb705-4fb9-481b-a4f7-5b7081a8b7fe": "sRGB",
+                    "a0b99512-bd28-4da6-9b0c-9c07b7bb7d16": "72dpi",
+                    "6b5847d4-038a-4900-a0b2-e54b452fd3ac": "Landscape"
+                },
+                "record": {
+                    "createdAt": "2022-08-06T18:05:04.043Z",
+                    "createdBy": {
+                        "id": "abc81e5f-73bd-4ad0-b0b8-20f4499c7312",
+                        "username": "jeverling@gmail.com"
+                    },
+                    "modifiedAt": "2022-08-06T18:05:11.074Z",
+                    "modifiedBy": {
+                        "id": "abc81e5f-73bd-4ad0-b0b8-20f4499c7312",
+                        "username": ""
+                    },
+                    "softDeletedBy": {},
+                    "version": {
+                        "version": 0,
+                        "current": "cc67d0f9-5094-4560-8102-122764e6b725",
+                        "head": "cc67d0f9-5094-4560-8102-122764e6b725",
+                        "parentid": "cc67d0f9-5094-4560-8102-122764e6b725",
+                        "isversionable": true,
+                        "islatestversion": true,
+                        "ismajorversion": false
+                    }
+                },
+                "categories": [
+                    "63a6dc6c-33bf-4cd8-9101-f9e15fa0107b"
+                ],
+                "keywords": [],
+                "assetCheckInComment": "CheckInComment",
+                "userViewCounts": {},
+                "createdAt": "2022-08-06T18:05:04.043Z",
+                "_links": {
+                    "self": "asset",
+                    "functions": [
+                        "assets",
+                        "assetCategories",
+                        "assetCheckIn",
+                        "assetCheckOut",
+                        "assetKeywords",
+                        "assetHistory",
+                        "assetComments",
+                        "assetUploads",
+                        "assetVersion",
+                        "assetVersions",
+                        "relatedAssets",
+                        "relatedAssetsGalleryUrl",
+                        "downloadAssets",
+                        "downloaded",
+                        "shareAssets",
+                        "iptc",
+                        "exif",
+                        "xmp",
+                        "colors",
+                        "text",
+                        "reactivateAsset",
+                        "viewed",
+                        "assetApplyRating",
+                        "renditions",
+                        "assetAutotag",
+                        "assetAutotags",
+                        "assetAutotagKeywords"
+                    ]
+                },
+                "translationKeys": {},
+                "interpolations": {}
+            }
+        ]
+    }
+}
+
 async function uploadAsset() {
     /*
         4 step process:
