@@ -1,17 +1,23 @@
-import { Box, Stack, Flex, Heading, Badge, Text, StackDivider } from "@chakra-ui/react";
+import {
+  Box,
+  Stack,
+  Flex,
+  Heading,
+  Badge,
+  Text,
+  StackDivider,
+} from "@chakra-ui/react";
 import React from "react";
 import { CameraArray } from "../model/camera";
-import { Route, Routes, Link, useParams } from 'react-router-dom';
-
+import { Route, Routes, Link, useParams } from "react-router-dom";
 
 export function Cameras() {
- 
   return (
     <Routes>
-      <Route path={'/'} element={<CameraList />} />
-      <Route path={':cameraId'} element={<CameraDetail />} />
+      <Route path={"/"} element={<CameraList />} />
+      <Route path={":cameraId"} element={<CameraDetail />} />
     </Routes>
-  )
+  );
 }
 
 export class CameraList extends React.Component {
@@ -19,11 +25,10 @@ export class CameraList extends React.Component {
     super(props);
 
     this.state = {
-      allCameras: null
-    }
-    
-    this.init = this.init.bind(this);
+      allCameras: null,
+    };
 
+    this.init = this.init.bind(this);
   }
 
   componentDidMount() {
@@ -36,7 +41,7 @@ export class CameraList extends React.Component {
 
     console.log(allCameras);
     this.setState({
-      allCameras: allCameras
+      allCameras: allCameras,
     });
   }
 
@@ -44,26 +49,38 @@ export class CameraList extends React.Component {
     return (
       <Box p={3}>
         <Box px={3} py={1}>
-          <Heading size='md' color='gray.500'>Cameras</Heading>
+          <Heading size="md" color="gray.500">
+            Cameras
+          </Heading>
         </Box>
-        <Stack bg='white' p={3} borderRadius='lg' divider={<StackDivider />}>
-          {this.state.allCameras?.map((camera, i) => 
+        <Stack bg="white" p={3} borderRadius="lg" divider={<StackDivider />}>
+          {this.state.allCameras?.map((camera, i) => (
             <Link to={camera.cameraId}>
-              <Flex w='full' p={3} _hover={{ bg: 'blackAlpha.100'}} justifyContent='space-between'>
-                <Heading size='md' color='gray.600'>{camera.cameraId}</Heading>
+              <Flex
+                w="full"
+                p={3}
+                _hover={{ bg: "blackAlpha.100" }}
+                justifyContent="space-between"
+              >
+                <Heading size="md" color="gray.600">
+                  {camera.cameraId}
+                </Heading>
                 <Box>
-                  <Badge colorScheme={(Boolean(camera.active) ? 'red' : 'green')}>
+                  <Badge
+                    rounded={"md"}
+                    colorScheme={Boolean(camera.active) ? "red" : "green"}
+                  >
                     <Text>
-                      {Boolean(camera.active) ? 'Active' : 'Inactive'}
+                      {Boolean(camera.active) ? "Active" : "Inactive"}
                     </Text>
                   </Badge>
-                  </Box>
+                </Box>
               </Flex>
             </Link>
-          )}
+          ))}
         </Stack>
       </Box>
-    )
+    );
   }
 }
 
@@ -72,7 +89,7 @@ function CameraDetail(props) {
 
   return (
     <Box>
-      <Heading color='gray.600'>Camera Detail: {cameraId}</Heading>
+      <Heading color="gray.600">Camera Detail: {cameraId}</Heading>
     </Box>
-  )
+  );
 }
