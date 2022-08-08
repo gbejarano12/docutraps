@@ -6,6 +6,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { ChakraProvider, Box, Flex, Heading, Text, Stack, StackDivider, IconButton } from '@chakra-ui/react';
 import { Cameras, CameraList, CameraDetail } from './view/cameras';
 import { FaBars } from 'react-icons/fa';
+import { testMediavaletCalls } from './model/mediavaletApi';
 // import "https://survey123.arcgis.com/api/jsapi";
 
 
@@ -153,6 +154,17 @@ function Surveys() {
 
 function Photos() {
 
+  const getMediavalet = async () => {
+    let mediavalet = await testMediavaletCalls();
+      console.log(['In COmponent', mediavalet]);
+  }
+
+  React.useEffect(
+    () => {
+      getMediavalet();  
+    }, []
+  )
+
   return (
     <Box p={3}>
       <Heading color='gray.600'>Photos</Heading>
@@ -226,12 +238,21 @@ function SurveyForm() {
   const [surveyForm, setForm] = React.useState(null);
   React.useEffect(
     () => {
+      
+
       let survey = new window.Survey123WebForm({
         itemId: '7b773ec3ebf149a6982255dd0b2a5e3c',        
         clientId: '1GFDSGHAfH07TlMs',
-        onFormLoaded: (surveyF, ev) => {
-          console.log(['FormLoaded', survey, survey?.getQuestions(), ev])
+        globalId: '5E3F3E62-B2B9-4850-8FF6-D9A6EA9B20CF',
+        mode: 'view',
+        onFormLoaded: (surveyF) => {
+          console.log(['FormLoaded', survey, survey?.getQuestions()])
+        },
+        onFormSubmitted: (data) => {
+          console.log(['Form Submitted', data]);
         }
+        // /defaultQuestionValue: {question_id: value} //{5E3F3E62-B2B9-4850-8FF6-D9A6EA9B20CF}
+        // hideElements: ['theme', 'navbar', 'field:[question_id]']
       });
       survey.options.container = 'formDiv';
       setForm(survey);

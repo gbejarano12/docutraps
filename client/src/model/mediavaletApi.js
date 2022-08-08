@@ -1,5 +1,68 @@
 // API Documentation URL: https://docs.mediavalet.com/#ff14892b-ab18-450d-b293-b787859b6b40
+// url: `https://login.mediavalet.com/Account/Login?
+// ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3F
+// client_id%3D7f495f1f-21dc-4f9b-9071-4b56e5375e9f%26
+// response_type%3Dcode%26
+// scope%3Dopenid%2520api%26
+// redirect_uri%3Dhttps%253A%252F%252Foauth.pstmn.io%252Fv1%252Fbrowser-callback%26
+// state%3Dnonce`
 
+
+export async function testMediavaletCalls() {
+    let url = 'https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=nonce';
+    // url += 'client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f';
+    // url += '&response_type=code';
+    // url += '&scope=openid%20api';
+    // url += '&redirect_uri=https://oauth.pstmn.io/v1/browser-callback';
+    // url += '&state=state-296bc9a0';
+
+    let response = await fetch(url, {
+        method: "GET",
+        
+        
+    })
+    .then((res) => res.body)
+    .then((rb) => {
+        console.log(["Mediavalet Inside Call", rb]);
+        const reader = rb.getReader();
+
+        return new ReadableStream({
+            start(controller) {
+                function push() {
+                    reader.read().then(({done, value }) => {
+                        if (done) {
+                            console.log('done', done);
+                            controller.close();
+                            return;
+                        } 
+                        controller.enqueue(value);
+                        console.log(done, value);
+                        push();
+                    });
+                }
+                push();
+            }
+        });
+    })
+    .then((stream) => 
+        new Response(stream, { headers: {'Content-Type': 'text/html' }}).text()
+    )
+    .then((result) => {
+        console.log(result);
+    })
+    
+    // .catch(async (err) => {
+    //     if (err.name === 'AbortError') {
+    //         console.log('Promise Aborted');
+    //     } else {
+           
+    //         return ({ status: 400, err: err });
+    //     }
+        
+    // });
+
+    console.log(["Mediavalet Call", response]);
+}
 
 //Example API Search result from mediavalet
 let exampleSearchAPIResult = {
