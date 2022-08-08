@@ -16,6 +16,7 @@ import {
 import { Cameras, CameraList, CameraDetail } from "./view/cameras";
 import MapOfCameras from "./view/map";
 import { FaBars } from "react-icons/fa";
+import { testMediavaletCalls } from './model/mediavaletApi';
 // import "https://survey123.arcgis.com/api/jsapi";
 
 // function App() {
