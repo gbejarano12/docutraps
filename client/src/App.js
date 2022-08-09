@@ -217,7 +217,7 @@ function MediaValetAuth() {
   const getToken = async () => {
     const params = {
       grant_type: 'authorization_code',
-      code: 'ZxHbbobU75x-flj23RCU3uwsNLRc4qtMwUKNsTqXMPo',
+      code: searchParams.get('code'),
       client_id: '7f495f1f-21dc-4f9b-9071-4b56e5375e9f',
       redirect_uri: 'https://docutraps.azurewebsites.net/mediavalet/auth/callback', // <-- This is the url of the page they just redirected to (not including the querystring)
       client_secret: '86hVfmmct24ydSqAmBhdArCMw3fSz92kPL814ZWoeYw='
@@ -226,6 +226,12 @@ function MediaValetAuth() {
     let tokenResponse = fetch('https://login.mediavalet.com/connect/token', 
         {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Ocp-Apim-Subscription-Key': '03e0a3d8270a432d9ede6e2cfca073dd',
+            Accept: '*/*',
+            Host: 'login.mediavalet.com',
+          },
           body: JSON.stringify(params), // <-- This function turns the object into query param format eg. a=foo&b=barr
           
         }
