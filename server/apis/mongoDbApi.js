@@ -78,7 +78,7 @@ router.patch('/cameras/:cameraId', async function(req, res, next) {
     res.send(patchResult);
 });
 
-router.get('/auth', function(req, res, next) {
+router.get('/auth/callback', function(req, res, next) {
     console.log(['request', req]);
     res.send(req);
 })
