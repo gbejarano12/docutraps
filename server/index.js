@@ -6,8 +6,8 @@ var cors = require('cors');
 var bodyParser = require('body-parser');
 var mongoDbApi = require('./apis/mongoDbApi');
 var mongoRouter = mongoDbApi.router;
-var mediavaletApi = require('./apis/mediavaletApi');
-var mediavaletRouter = mediavaletApi.router;
+// var mediavaletApi = require('./apis/mediavaletApi');
+// var mediavaletRouter = mediavaletApi.router;
 
 const PORT = process.env.PORT || 3001;
 
@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.use('/mongodb', mongoRouter);
-app.use('/mediavalet', mediavaletRouter);
+// app.use('/mediavalet', mediavaletRouter);
 app.get('/api', (req, res) => {
 	res.json({ message: 'Hello from server!' });
 });

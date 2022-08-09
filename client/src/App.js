@@ -100,7 +100,7 @@ class App extends React.Component {
                 <Route path="photos" element={<Photos />} />
                 <Route path="cameras/*" element={<Cameras />} />
                 <Route path="documents" element={<Documents />} />
-                {/* <Route path='mediavalet/auth/callback' element={<MediaValetAuth />} /> */}
+                <Route path='mediavalet/auth/callback' element={<MediaValetAuth />} />
               </Routes>
 
             </Box>
@@ -217,7 +217,7 @@ function MediaValetAuth() {
   const getToken = async () => {
     const params = {
       grant_type:'authorization_code',
-      code: '87gkm4eIngX9GKpGI4zQDgjG1rEteOfYa3DvPkIQrR8',
+      code: searchParams.get('code'),
       client_id: '7f495f1f-21dc-4f9b-9071-4b56e5375e9f',
       redirect_uri: 'https://docutraps.azurewebsites.net/mediavalet/auth/callback', // <-- This is the url of the page they just redirected to (not including the querystring)
       client_secret: '86hVfmmct24ydSqAmBhdArCMw3fSz92kPL814ZWoeYw='
@@ -231,7 +231,7 @@ function MediaValetAuth() {
     }
     formBody = formBody.join("&");
 
-    let tokenResponse = fetch('https://login.mediavalet.com/connect/token', 
+    let tokenResponse = await fetch('https://login.mediavalet.com/connect/token', 
         {
           method: 'POST',
           headers: {
@@ -241,39 +241,40 @@ function MediaValetAuth() {
             Host: 'login.mediavalet.com',
           },
           body: formBody, // <-- This function turns the object into query param format eg. a=foo&b=barr
-          
+          referrer: 'https://docutraps.azurewebsites.net/mediavalet/auth/callback'
         }
-    ).then((res) => res.body)
-    .then((rb) => {
-        console.log(["Mediavalet Inside Call", rb]);
-        const reader = rb.getReader();
-
-        return new ReadableStream({
-            start(controller) {
-                function push() {
-                    reader.read().then(({done, value }) => {
-                        if (done) {
-                            console.log('done', done);
-                            controller.close();
-                            return;
-                        } 
-                        controller.enqueue(value);
-                        console.log(done, value);
-                        push();
-                    });
-                }
-                push();
-            }
-        });
-    })
-    .then((stream) => 
-        new Response(stream, { headers: {'Content-Type': 'text/html' }}).text()
     )
-    .then((result) => {
-        console.log(result);
-    });
+    // .then((res) => res.body)
+    // .then((rb) => {
+    //     console.log(["Mediavalet Inside Call", rb]);
+    //     const reader = rb.getReader();
 
-    const response = await tokenResponse;
+    //     return new ReadableStream({
+    //         start(controller) {
+    //             function push() {
+    //                 reader.read().then(({done, value }) => {
+    //                     if (done) {
+    //                         console.log('done', done);
+    //                         controller.close();
+    //                         return;
+    //                     } 
+    //                     controller.enqueue(value);
+    //                     console.log(done, value);
+    //                     push();
+    //                 });
+    //             }
+    //             push();
+    //         }
+    //     });
+    // })
+    // .then((stream) => 
+    //     new Response(stream, { headers: {'Content-Type': 'text/html' }}).text()
+    // )
+    // .then((result) => {
+    //     console.log(result);
+    // });
+
+    const response = await tokenResponse.json();
     console.log(['Mediavalet token', response, params, formBody]);
     //const { access_token, expires_in } = response; 
   }
