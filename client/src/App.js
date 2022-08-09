@@ -191,7 +191,13 @@ function Photos() {
   return (
     <Box p={3}>
       <Heading color="gray.600">Photos</Heading>
-      <a href='https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce'>Get Auth</a>
+      {/* <a href='https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce'>Get Auth</a> */}
+    
+      <a href={`http://localhost:3000/mediavalet/auth/callback?
+code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
+&scope=openid%20api
+&state=nonce
+&session_state=CR_iT8Xl3e6tTdAg_3ZTETHJ0pxo4a6XdekYn6qwJxY.O1YWqPhHfEvZ-N_XilSCGw`}>Authenticate</a>
     </Box>
   );
 }
@@ -208,7 +214,45 @@ function MediaValetAuth() {
   let [searchParams, setSearchParams] = useSearchParams();
   let location = useLocation();
 
-  console.log(['MediaValetAuth', searchParams, location]);
+  const getToken = async () => {
+    const params = {
+      grant_type: 'authorization_code',
+      code: searchParams.get('code'),
+      client_id: '7f495f1f-21dc-4f9b-9071-4b56e5375e9f',
+      redirect_uri: 'https://docutraps.azurewebsites.net/mediavalet/auth/callback', // <-- This is the url of the page they just redirected to (not including the querystring)
+      client_secret: '86hVfmmct24ydSqAmBhdArCMw3fSz92kPL814ZWoeYw='
+    };
+
+    let tokenResponse = fetch('https://login.mediavalet.com/connect/token', 
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Ocp-Apim-Subscription-Key': '03e0a3d8270a432d9ede6e2cfca073dd',
+            Accept: '*/*',
+            Host: 'login.mediavalet.com',
+          },
+          body: JSON.stringify(params), // <-- This function turns the object into query param format eg. a=foo&b=barr
+          cache: 'no-cache'
+        }
+    );
+
+    const response = await tokenResponse;
+    console.log(['Mediavalet token', response]);
+    const { access_token, expires_in } = response; 
+  }
+
+  React.useEffect(
+    () => {
+      console.log(['MediaValetAuth', searchParams.get('code'), searchParams.get('scope')
+    , searchParams.get('state'), searchParams.get('session_state'), location]);
+      getToken();
+    return () => {
+      console.log("Clear");
+    };
+    }, []
+  )
+  
   return null;
 }
 
