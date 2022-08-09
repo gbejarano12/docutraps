@@ -6,6 +6,15 @@
 // scope%3Dopenid%2520api%26
 // redirect_uri%3Dhttps%253A%252F%252Foauth.pstmn.io%252Fv1%252Fbrowser-callback%26
 // state%3Dnonce`
+//redirect https://docutraps.azurewebsites.net/mediavalet/auth/callback
+
+/*
+https://docutraps.azurewebsites.net/mediavalet/auth/callback?
+code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
+&scope=openid%20api
+&state=nonce
+&session_state=CR_iT8Xl3e6tTdAg_3ZTETHJ0pxo4a6XdekYn6qwJxY.O1YWqPhHfEvZ-N_XilSCGw
+*/
 
 
 export async function testMediavaletCalls() {

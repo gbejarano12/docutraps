@@ -2,7 +2,7 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import $ from "jquery";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useSearchParams, useLocation } from "react-router-dom";
 import {
   ChakraProvider,
   Box,
@@ -100,7 +100,9 @@ class App extends React.Component {
                 <Route path="photos" element={<Photos />} />
                 <Route path="cameras/*" element={<Cameras />} />
                 <Route path="documents" element={<Documents />} />
+                <Route path='mediavalet/auth/callback' element={<MediaValetAuth />} />
               </Routes>
+
             </Box>
           </Flex>
         </Flex>
@@ -185,9 +187,11 @@ function Surveys() {
 }
 
 function Photos() {
+
   return (
     <Box p={3}>
       <Heading color="gray.600">Photos</Heading>
+      <a href='https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce'>Get Auth</a>
     </Box>
   );
 }
@@ -198,6 +202,14 @@ function Documents() {
       <Heading color="gray.600">Documents</Heading>
     </Box>
   );
+}
+
+function MediaValetAuth() {
+  let [searchParams, setSearchParams] = useSearchParams();
+  let location = useLocation();
+
+  console.log(['MediaValetAuth', searchParams, location]);
+  return null;
 }
 
 // class SurveyForm2 extends React.Component {
