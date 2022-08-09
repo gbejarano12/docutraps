@@ -191,7 +191,7 @@ function Photos() {
   return (
     <Box p={3}>
       <Heading color="gray.600">Photos</Heading>
-      <a href='https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce'>Get Auth</a>
+      <a href='https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce'>Get Auth</a>
     
       <a href={`http://localhost:3000/mediavalet/auth/callback?
 code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
@@ -217,7 +217,7 @@ function MediaValetAuth() {
   const getToken = async () => {
     const params = {
       grant_type: 'authorization_code',
-      code: searchParams.get('code'),
+      code: 'ZxHbbobU75x-flj23RCU3uwsNLRc4qtMwUKNsTqXMPo',
       client_id: '7f495f1f-21dc-4f9b-9071-4b56e5375e9f',
       redirect_uri: 'https://docutraps.azurewebsites.net/mediavalet/auth/callback', // <-- This is the url of the page they just redirected to (not including the querystring)
       client_secret: '86hVfmmct24ydSqAmBhdArCMw3fSz92kPL814ZWoeYw='
@@ -226,19 +226,13 @@ function MediaValetAuth() {
     let tokenResponse = fetch('https://login.mediavalet.com/connect/token', 
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Ocp-Apim-Subscription-Key': '03e0a3d8270a432d9ede6e2cfca073dd',
-            Accept: '*/*',
-            Host: 'login.mediavalet.com',
-          },
           body: JSON.stringify(params), // <-- This function turns the object into query param format eg. a=foo&b=barr
-          cache: 'no-cache'
+          
         }
     );
 
     const response = await tokenResponse;
-    console.log(['Mediavalet token', response]);
+    console.log(['Mediavalet token', response, params]);
     const { access_token, expires_in } = response; 
   }
 
