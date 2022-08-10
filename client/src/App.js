@@ -16,7 +16,9 @@ import {
 import { Cameras, CameraList, CameraDetail } from "./view/cameras";
 import MapOfCameras from "./view/map";
 import { FaBars } from "react-icons/fa";
-import { testMediavaletCalls } from './model/mediavaletApi';
+import { testMediavaletCalls, MediaValetApi } from './model/mediavaletApi';
+import { Photos } from './view/photos';
+import { makeDBRequest } from './model/mongoDB';
 // import "https://survey123.arcgis.com/api/jsapi";
 
 // function App() {
@@ -97,7 +99,7 @@ class App extends React.Component {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="map" element={<MapOfCameras />} />
                 <Route path="surveys" element={<SurveyForm key="form" />} />
-                <Route path="photos" element={<Photos />} />
+                <Route path="photos/*" element={<Photos />} />
                 <Route path="cameras/*" element={<Cameras />} />
                 <Route path="documents" element={<Documents />} />
                 <Route path='mediavalet/auth/callback' element={<MediaValetAuth />} />
@@ -186,22 +188,6 @@ function Surveys() {
   );
 }
 
-function Photos() {
-
-  return (
-    <Box p={3}>
-      <Heading color="gray.600">Photos</Heading>
-      <a href='https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce'>Get Auth</a>
-    
-      <a href={`http://localhost:3000/mediavalet/auth/callback?
-code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
-&scope=openid%20api
-&state=nonce
-&session_state=CR_iT8Xl3e6tTdAg_3ZTETHJ0pxo4a6XdekYn6qwJxY.O1YWqPhHfEvZ-N_XilSCGw`}>Authenticate</a>
-    </Box>
-  );
-}
-
 function Documents() {
   return (
     <Box p={3}>
@@ -244,35 +230,6 @@ function MediaValetAuth() {
           referrer: 'https://docutraps.azurewebsites.net/mediavalet/auth/callback'
         }
     )
-    // .then((res) => res.body)
-    // .then((rb) => {
-    //     console.log(["Mediavalet Inside Call", rb]);
-    //     const reader = rb.getReader();
-
-    //     return new ReadableStream({
-    //         start(controller) {
-    //             function push() {
-    //                 reader.read().then(({done, value }) => {
-    //                     if (done) {
-    //                         console.log('done', done);
-    //                         controller.close();
-    //                         return;
-    //                     } 
-    //                     controller.enqueue(value);
-    //                     console.log(done, value);
-    //                     push();
-    //                 });
-    //             }
-    //             push();
-    //         }
-    //     });
-    // })
-    // .then((stream) => 
-    //     new Response(stream, { headers: {'Content-Type': 'text/html' }}).text()
-    // )
-    // .then((result) => {
-    //     console.log(result);
-    // });
 
     const response = await tokenResponse.json();
     console.log(['Mediavalet token', response, params, formBody]);
@@ -293,59 +250,6 @@ function MediaValetAuth() {
   return null;
 }
 
-// class SurveyForm2 extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       arr: []
-//     }
-
-//     this.init = this.init.bind(this);
-//   }
-
-//   componentDidMount() {
-//     this.init();
-
-//     return () => {
-//       this.setState = {
-//         arr: []
-//       }
-//     }
-//   }
-
-//   // componentWillUnmount() {
-//   //   let arr = this.state.arr;
-//   //   this.setState({
-//   //     arr: []
-//   //   })
-//   // }
-
-//   init() {
-//     console.log('Getting Form');
-//     // let survey = new window.Survey123WebForm({
-//     //   itemId: '7b773ec3ebf149a6982255dd0b2a5e3c',
-//     //   container: 'formDiv2',
-//     //   clientId: '1GFDSGHAfH07TlMs'
-//     // });
-//     let arr = this.state.arr;
-//     arr.push('hello');
-//     this.setState({
-//       arr: arr
-//     })
-//   }
-
-//   render() {
-//     return (
-//       <div key='form' id='formDiv2'>
-//        {this.state.arr.map((greet, i) =>
-//           <p>{greet}</p>
-//         )}
-//       </div>
-//     );
-//   }
-// }
-
 function SurveyForm() {
   const [surveyForm, setForm] = React.useState(null);
   React.useEffect(() => {
@@ -354,7 +258,23 @@ function SurveyForm() {
       clientId: "1GFDSGHAfH07TlMs",
       onFormLoaded: (surveyF, ev) => {
         console.log(["FormLoaded", survey, survey?.getQuestions(), ev]);
+        let questionValue = survey.getQuestionValue().then(res => {
+          console.log('questionValue', res);
+        })
       },
+      onFormSubmitted: (surveySubmitted) => {
+        let formGlobalId = surveySubmitted.result[0]?.addResults[0].globalId;
+        let formValues = surveySubmitted.surveyFeatureSet?.features[0];
+        let insertBody = {
+          _id: formGlobalId,
+          features: formValues
+        }
+        let dbInsert = makeDBRequest('POST', '/surveysSubmitted', insertBody).then(res => {
+          console.log('DB Insert', res, insertBody);
+        });
+        
+        console.log(['Form Submitted', surveySubmitted, formValues, formGlobalId]);
+      }
     });
     survey.options.container = "formDiv";
     setForm(survey);

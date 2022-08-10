@@ -1,5 +1,5 @@
 
-class Survey {
+export class Survey {
     constructor() {
         this.projectName = null;
         this.employee = null; // employee or worker
@@ -18,6 +18,32 @@ class Survey {
         this.cameraWorkingSetup = null;
         this.cameraWorkingPickup = null;
         this.comments = null;
+    }
+
+    async loadSurvey() {
+        let survey = new window.Survey123WebForm({
+            itemId: "7b773ec3ebf149a6982255dd0b2a5e3c",
+            clientId: "1GFDSGHAfH07TlMs",
+            onFormLoaded: (surveyF, ev) => {
+                console.log(["FormLoaded", survey, survey?.getQuestions(), ev]);
+            },
+        });
+    }
+
+    async loadAnsweredSurvey(globalId, divId) {
+        //'387048b3-86f1-4b99-81b9-46d39f22ca71'
+        let survey = await new window.Survey123WebForm({
+            itemId: "7b773ec3ebf149a6982255dd0b2a5e3c",
+            clientId: "1GFDSGHAfH07TlMs",
+            globalId: globalId,
+            mode: 'view',
+            container: `${divId}`,
+            onFormLoaded: (surveyF) => {
+                return survey;
+            }
+        });
+
+        // return survey;
     }
 
     // defaultQuestionValue

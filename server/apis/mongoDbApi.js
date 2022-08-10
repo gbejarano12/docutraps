@@ -59,6 +59,18 @@ router.post('/surveys', async function(req, res, next) {
     res.send(insertResult);
 });
 
+router.get('/surveysSubmitted', async function(req, res, next) {
+    // To Do: Get params from req.query
+    let surveyResult = await getCollection('surveysSubmitted');
+    res.send(surveyResult);
+});
+
+router.post('/surveysSubmitted', async function(req, res, next) {
+    let data = req.body;
+    let insertResult = await insertOne('surveysSubmitted', data);
+    res.send(insertResult);
+});
+
 router.get('/cameras', async function(req, res, next) {
     // To Do: Get params from req.query
     let cameraResult = await getCollection('cameras');

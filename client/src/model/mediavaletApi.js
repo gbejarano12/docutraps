@@ -16,9 +16,210 @@ code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
 &session_state=CR_iT8Xl3e6tTdAg_3ZTETHJ0pxo4a6XdekYn6qwJxY.O1YWqPhHfEvZ-N_XilSCGw
 */
 
+const mediaValetApiUrl = 'https://api.mediavalet.com';
+
+async function makeRequest(method, url, body) {
+    let accessToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjA0MUIwMUQ1OTg1ODI4MzcwNTI2Qjk5Rjc2MjgyNkIyNUM3QkE2ODciLCJ0eXAiOiJKV1QiLCJ4NXQiOiJCQnNCMVpoWUtEY0ZKcm1mZGlnbXNseDdwb2MifQ.eyJuYmYiOjE2NjAxMTA1MTgsImV4cCI6MTY2MDExMDgxOCwiaXNzIjoiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20vcmVzb3VyY2VzIiwiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCJdLCJjbGllbnRfaWQiOiI3ZjQ5NWYxZi0yMWRjLTRmOWItOTA3MS00YjU2ZTUzNzVlOWYiLCJzdWIiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsImF1dGhfdGltZSI6MTY2MDA3Njg0OSwiaWRwIjoibG9jYWwiLCJhcGlfdXJpIjoiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCIsIlBlcm1pc3Npb25zIjoiW3tcIlNlY3VyYWJsZU9iamVjdFR5cGVcIjo5LFwiT2JqZWN0SWRcIjpcIjAzY2JhMjdlLTI1ZTctNGJjNi1iYjU0LWJjMjY5MWQ1MmQxYlwiLFwiUGVybWlzc2lvbnNcIjozMDI0OTkzMjA5Njk3NjMwOTIzLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjAsXCJPYmplY3RJZFwiOlwiMzZhMmMyMzgtNTY0NC00YzU0LTlkZDUtYmE0NmFlM2E4NGJmXCIsXCJQZXJtaXNzaW9uc1wiOjEyMjQ4MzY1MjQ2NTUyNDA2NzMxLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjEsXCJPYmplY3RJZFwiOlwiZTAzN2JjYzQtOTM3Ni00ZGMwLTgwYWYtMjRmYTUxODEzYjI5XCIsXCJQZXJtaXNzaW9uc1wiOjMwMjQ5OTMyMDk2OTc2MzA5MjMsXCJQZXJtaXNzaW9uczJcIjoxfV0iLCJSb2xlSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwiVXNlck9yZ1VuaXRJZCI6IlwiMDNjYmEyN2UtMjVlNy00YmM2LWJiNTQtYmMyNjkxZDUyZDFiXCIiLCJVc2VyTmFtZSI6ImJlamFyYW5vX2d1c3Rhdm9AeWFob28uY29tIiwiRW1haWwiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsIlVzZXJJZCI6IlwiMDViYTA4NjUtYzk5ZC00NWU5LTkxNzAtYmNlNTBhY2NhMTI5XCIiLCJTSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwic2NvcGUiOlsib3BlbmlkIiwiYXBpIl0sImFtciI6WyJwd2QiXX0.LBmfQD9kkDcw654Scnu8eTFu9yNMHIT4ICRdJTbs0rrlxJwvVc098fetnOm6cziTzMj0nH0OQ3rAbR91HXxsObMH0Nvs6T0i1MSBDrJ9RFo8EKqEby4-mM4gob21rijnePTaCfBgLgUZrj8BmemOu4WA7YLeM-anzSpZZ3o-Sa7AYveExRjbd3H9Z5Q1RsX9bmP9Fc7ySfiKx_3xPtZY-nAsKZ5w_0YR7mJjC0R104u9Mmghx1Drf6eABzn5U19K8xhOLpGzjrv__-e7q2LD8dEcSR-IN4VHXM8WuHzzUToJku-q0GR2qgxhKSMVzug44F-_SZP3-HjgL1fBrI86AUAg9o06Qo3pVK_aREb0Nvy25bmu0zIroYLhe4RU2XLL2A1O4pFQoi62V_ibau6-AY_Erm4nKwg5vKEv6IbDKlMgI_kwXvhO9gZEIJx3aNdX6ojmtw_cOgKhKhGSOBnQp0QblMb2jAUdE-kFOzi2TQazer0VMdXiissGcs2Ji2YCQDwkKLoDfSsDgvUpQOBSojgWBEhx-aHzArbZYlCtTSWLoidbxZHb3r15TD0g6zlUVgsyk_J53S0YHXF1L7EtwRfZEY5-dNwPnjq6bsvlkg4o3x07HdPvGC5wM6kIIrhuE1L1K00tD554_1Gp8M6Pk1jsdf0ru2vchUrkSLvnPeU";
+    let subscriptionKey = '03e0a3d8270a432d9ede6e2cfca073dd'; // put in env
+
+    let requestOptions = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+            'Ocp-Apim-Subscription-Key': subscriptionKey
+        }
+    };
+
+    if (Boolean(body)) {
+        body = JSON.stringify(body);
+        requestOptions.body = body;
+    }
+
+    let request = await fetch(mediaValetApiUrl + url, requestOptions);
+    
+    let result = await request.json();
+    return result?.payload ?? result?.errors;
+}
+
+export class MediaValetApi {
+    constructor() {
+        this.myFolderId = null;
+        this.baseFolder = null;
+    }
+
+    async getAllCategories() {
+        let url = '/categories';
+        let result = await makeRequest('GET', url);
+        console.log(['Categories', result]);
+
+        return result;
+    }
+
+    async setBaseCategory(categoryName) {
+        let categories = await this.getAllCategories();
+        let baseCategory = categories.find( ({ name }) => name === categoryName);
+        console.log(["Base Category", baseCategory]);
+        if (baseCategory) {
+            baseCategory = new MediaValetCategory(baseCategory);
+            this.baseFolder = baseCategory;
+        }
+
+        return baseCategory;
+    }
+
+    async getSubCategories() {
+        let url = `/categories/${this.baseFolder.id}/subcategories`;
+        let result = await makeRequest('GET', url);
+        console.log(['Sub Cats', result]);
+        return result;
+    }
+    
+    async getAttributes() {
+        let url = `/attributes`;
+        let result = await makeRequest('GET', url);
+        console.log('ALL ATTRIBUTES', result);
+        return result;
+    }
+
+    async createCategory(parentId, name, description) {
+        let url = `/folders`;
+        let body = {
+            parentId: parentId,
+            treeName: name
+        };
+        let result = await makeRequest('POST', url, body);
+        result = new MediaValetCategory(result);
+        console.log('CREATE CATEGORY', result);
+        return result;
+    }
+}
+
+export class MediaValetCategory {
+    constructor(category) {
+        this.assetCount = category?.assetCount ?? null; // ex: 3
+        this.categoryFeatures = category?.categoryFeatures ?? null; //ex: null
+        this.container = category?.container ?? null; //ex: null
+        this.description = category?.description ?? null; //ex: ""
+        this.id = category?.id ?? null; //ex: "ce762380-c7b5-4766-93c3-04e6df034116"
+        this.includedInBrandedPortalSync = category?.includedInBrandedPortalSync ?? null; //ex: false
+        this.name = category?.name ?? null; //ex: "CAMERA1_4_12_2022"
+        this.parentId = category?.parentId ?? null; //ex: "023dc43b-17c2-4b97-9ea7-a8d886f62c92"
+        this.subcats = category?.subcats ?? null; //ex: {total: 0}
+        this.subfolderCount = category?.subfolderCount ?? null; //ex: 0
+        this.syncedBrandedPortals = category?.syncedBrandedPortals ?? null; //ex: null
+        this.tree = category?.tree ?? null; //ex: {path: '\\Library\\gustavo-submission\\CAMERA1_4_12_2022', name: 'CAMERA1_4_12_2022'}
+        this._links = category?._links ?? null; //ex: {self: 'category', functions: Array(3)}
+    }
+
+    async getCategory(categoryId) {
+        let url = `/categories/${categoryId}`;
+        let result = await makeRequest('GET', url);
+        result = new MediaValetCategory(result);
+        console.log('Load Category', result);
+        return result;
+    }
+
+    async getSubCategories() {
+        let url = `/categories/${this.id}/subcategories`;
+        let result = await makeRequest('GET', url);
+        
+        for (let i = 0; i < result?.length; i++) {
+            result[i] = new MediaValetCategory(result[i]);
+        }
+        console.log(['Sub Cats', result]);
+        return result;
+    }
+
+    async getAssets() {
+        let url = `/categories/${this.id}/assets`;
+        let result = await makeRequest('GET', url);
+        let assets = result.assets;
+
+        for (let i = 0; i < assets?.length; i++) {
+            assets[i] = new MediaValetAsset(assets[i]);
+        }
+
+        console.log('Assets in category: '+ this.name, assets);
+        return assets;
+    }
+}
+
+class MediaValetAsset {
+    constructor(asset) {
+        this.altText = asset?.altText ?? null; // ex: ""
+        this.assetCheckInComment = asset?.assetCheckInComment ?? null; // ex: "CheckInComment"
+        this.attributes = asset?.attributes ?? null; // ex: {c0c67677-b8eb-4522-844b-a4aeb9be7807: '123', 6ce37da1-e78f-426a-9505-671fe9161272: '456', 63970d4e-6b53-4d31-a9a2-2ad651a560d7: 'image/jpeg', 3fbc5038-a878-4e10-992c-fccc46d430b8: 'JPG', 00c93bf7-7084-463d-921a-9d64aecff8c8: '', …}
+        this.categories = asset?.categories ?? null; // ex: ['ce762380-c7b5-4766-93c3-04e6df034116']
+        this.containerName = asset?.containerName ?? null; // ex: "medialibrary-03cba27e-25e7-4bc6-bb54-bc2691d52d1b"
+        this.createdAt = asset?.createdAt ?? null; // ex: "2022-08-09T23:25:03.088Z"
+        this.description = asset?.description ?? null; // ex: ""
+        this.file = asset?.file ?? null; // ex: {id: '869a6787-0f16-40f9-82dc-db35106f4267', title: 'IMG_0224', fileName: 'IMG_0224.JPG', md5: '557ba91e12bb4fb857ff89b36b6720e0', fileType: 'JPG', …}
+        this.id = asset?.id ?? null; // ex: "869a6787-0f16-40f9-82dc-db35106f4267"
+        this.interpolations = asset?.interpolations ?? null; // ex: {}
+        this.keywords = asset?.keywords ?? null; // ex: []
+        this.media = asset?.media ?? null; // ex: {type: 'Image', small: 'https://mvsfservicefabricusva.blob.core.windows.ne…2-03-08T14%3A47%3A24Z&se=2032-08-09T12%3A24%3A15Z', thumb: 'https://mvsfservicefabricusva.blob.core.windows.ne…3-04-18T01%3A40%3A13Z&se=2032-08-09T12%3A24%3A15Z', large: 'https://mvsfservicefabricusva.blob.core.windows.ne…1-06-05T14%3A47%3A13Z&se=2032-08-09T12%3A24%3A15Z', original: 'https://mvsfservicefabricusva.blob.core.windows.ne…lication%2Foctet-stream&rscd=file%3B%20attachment', …}
+        this.rating = asset?.rating ?? null; // ex: {average: 0, user: 0}
+        this.record = asset?.record ?? null; // ex: {createdAt: '2022-08-09T23:25:03.088Z', createdBy: {…}, modifiedAt: '2022-08-09T23:25:10.001Z', modifiedBy: {…}, softDeletedBy: {…}, …}
+        this.status = asset?.status ?? null; // ex: 0
+        this.title = asset?.title ?? null; // ex: "IMG_0224"
+        this.translationKeys = asset?.translationKeys ?? null; // ex: {}
+        this.userViewCounts = asset?.userViewCounts ?? null; // ex: {05ba0865-c99d-45e9-9170-bce50acca129: 2}
+        this._links = asset?._links ?? null; // ex: {self: 'asset', functions: Array(27)}
+    }
+
+    async checkOut() {
+        let url = `/assets/${this.id}/checkOut`;
+        let result = await makeRequest('POST', url);
+        console.log('CHECK OUT '+ this.title, result);
+        return result;
+    }
+
+    async getCategories() {
+        let url = `/assets/${this.id}/categories`;
+        let result = await makeRequest("GET", url);
+        console.log('CATEGORIES IN '+ this.title, result);
+        return result;
+    }
+
+    async getAttributes() {
+        let url = `/assets/${this.id}/attributes?includeSoftDeleted=true`;
+        let result = await makeRequest('GET', url);
+        console.log('ATTRIBUTES IN '+ this.title, result);
+        return result;
+    }
+
+    async getMetadata() {
+        //let url = `/assets/${this.id}/`
+    }
+
+    async updateAttribute(attributeId, value) {
+        let url = `/assets/${this.id}`;
+        let body = [
+            {
+                "op": "replace",
+                "path": `/attributes/${attributeId}`,
+                "value": value
+            }
+        ]
+        let result = await makeRequest('PATCH', url, body);
+        console.log("PATCH ON "+this.title, result)
+        return new MediaValetAsset(result);
+    }
+
+    async updateMetadata(updates) {
+        // updates = { path: <string>, value: <value> }
+    }
+
+}
+
+class MediaValetAttribute {
+
+}
+
 
 export async function testMediavaletCalls() {
-    let url = 'https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=nonce';
+    let url = 'https://api.mediavalet.com/assets/search';
     // url += 'client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f';
     // url += '&response_type=code';
     // url += '&scope=openid%20api';
@@ -26,39 +227,51 @@ export async function testMediavaletCalls() {
     // url += '&state=state-296bc9a0';
 
     let response = await fetch(url, {
-        method: "GET",
-        
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjA0MUIwMUQ1OTg1ODI4MzcwNTI2Qjk5Rjc2MjgyNkIyNUM3QkE2ODciLCJ0eXAiOiJKV1QiLCJ4NXQiOiJCQnNCMVpoWUtEY0ZKcm1mZGlnbXNseDdwb2MifQ.eyJuYmYiOjE2NjAwODgxMDcsImV4cCI6MTY2MDA4ODQwNywiaXNzIjoiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20vcmVzb3VyY2VzIiwiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCJdLCJjbGllbnRfaWQiOiI3ZjQ5NWYxZi0yMWRjLTRmOWItOTA3MS00YjU2ZTUzNzVlOWYiLCJzdWIiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsImF1dGhfdGltZSI6MTY2MDA3Njg0OSwiaWRwIjoibG9jYWwiLCJhcGlfdXJpIjoiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCIsIlBlcm1pc3Npb25zIjoiW3tcIlNlY3VyYWJsZU9iamVjdFR5cGVcIjo5LFwiT2JqZWN0SWRcIjpcIjAzY2JhMjdlLTI1ZTctNGJjNi1iYjU0LWJjMjY5MWQ1MmQxYlwiLFwiUGVybWlzc2lvbnNcIjozMDI0OTkzMjA5Njk3NjMwOTIzLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjAsXCJPYmplY3RJZFwiOlwiMzZhMmMyMzgtNTY0NC00YzU0LTlkZDUtYmE0NmFlM2E4NGJmXCIsXCJQZXJtaXNzaW9uc1wiOjEyMjQ4MzY1MjQ2NTUyNDA2NzMxLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjEsXCJPYmplY3RJZFwiOlwiZTAzN2JjYzQtOTM3Ni00ZGMwLTgwYWYtMjRmYTUxODEzYjI5XCIsXCJQZXJtaXNzaW9uc1wiOjMwMjQ5OTMyMDk2OTc2MzA5MjMsXCJQZXJtaXNzaW9uczJcIjoxfV0iLCJSb2xlSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwiVXNlck9yZ1VuaXRJZCI6IlwiMDNjYmEyN2UtMjVlNy00YmM2LWJiNTQtYmMyNjkxZDUyZDFiXCIiLCJVc2VyTmFtZSI6ImJlamFyYW5vX2d1c3Rhdm9AeWFob28uY29tIiwiRW1haWwiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsIlVzZXJJZCI6IlwiMDViYTA4NjUtYzk5ZC00NWU5LTkxNzAtYmNlNTBhY2NhMTI5XCIiLCJTSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwic2NvcGUiOlsib3BlbmlkIiwiYXBpIl0sImFtciI6WyJwd2QiXX0.E_qUnSKEmia4fr165hEK19jk9NA3GmYGEbin4weG2a10B02YshpyoddFeopM9q3cd37ULk6NIagIbybJ3M5ekxYwELl_IPvyGaaUNkuec_VRtq0UPET0nisWNguAWD2med97usydv_cDuo0SeQrf6x6gEXWADMcSkVESO8yzV_QlfP9JRCxC_3C21BIiZGT0SA7UObpe9rfTf9teXAzukpwtTRTz5VBz_CkxU3tVbiB6Qdd5tEeeJ2XrN1-DBdeRvTiJTU86lZV2nKbYHdtzCV96bDVm-tUIdObXI_jtNUM7IyMRs6X5PdkXub6yZ9Oj02cIl8ohBYbkcrbwGFfzPIkWEV8jd2BLuYge5rsnshFDdDoUP_nXhfhyC6bBVT_K_oIBO8cJqB5Yrrc7-z-uShtW6AMECcdo_0aPrNatP3J0_jBZk4_W1--0XtYzUXcv3tFmpulOJ7a7S3CjedqjnqmleK1FgeHSowjcvhRNgjZxSjFGz2T84Eb3-cmVUCYmTZ0vWnlCfv7r-j4rqKBuAEFPphhp7Gy5M3YLPHJl4ZKs5-zcSkIuS9FS4iDbKvgEJOkO1WAllCEDolgVVrM7YmEkYYVcyKHP7t8SbFVCcK5gh-8Rm1TlFjCpix8FOvbQFEYpbO-S49qHANwlpk2hfLmKxGgO1HgghRVF0rwoViM',
+            'Ocp-Apim-Subscription-Key': '03e0a3d8270a432d9ede6e2cfca073dd',
+        },
+        body: JSON.stringify({
+            "search": "gustavo-submission>CAMERA1_4_12_2022",
+            "count": 25,
+            "offset": 0,
+            "sort": "record.createdAt D",
+            "searchFields": "categories",
+            "includeSoftDeleted": true
+        })
         
     })
-    .then((res) => res.body)
-    .then((rb) => {
-        console.log(["Mediavalet Inside Call", rb]);
-        const reader = rb.getReader();
+    // .then((res) => res.body)
+    // .then((rb) => {
+    //     console.log(["Mediavalet Inside Call", rb]);
+    //     const reader = rb.getReader();
 
-        return new ReadableStream({
-            start(controller) {
-                function push() {
-                    reader.read().then(({done, value }) => {
-                        if (done) {
-                            console.log('done', done);
-                            controller.close();
-                            return;
-                        } 
-                        controller.enqueue(value);
-                        console.log(done, value);
-                        push();
-                    });
-                }
-                push();
-            }
-        });
-    })
-    .then((stream) => 
-        new Response(stream, { headers: {'Content-Type': 'text/html' }}).text()
-    )
-    .then((result) => {
-        console.log(result);
-    })
+    //     return new ReadableStream({
+    //         start(controller) {
+    //             function push() {
+    //                 reader.read().then(({done, value }) => {
+    //                     if (done) {
+    //                         console.log('done', done);
+    //                         controller.close();
+    //                         return;
+    //                     } 
+    //                     controller.enqueue(value);
+    //                     console.log(done, value);
+    //                     push();
+    //                 });
+    //             }
+    //             push();
+    //         }
+    //     });
+    // })
+    // .then((stream) => 
+    //     new Response(stream, { headers: {'Content-Type': 'text/html' }}).text()
+    // )
+    // .then((result) => {
+    //     console.log(result);
+    // })
     
     // .catch(async (err) => {
     //     if (err.name === 'AbortError') {
@@ -69,8 +282,8 @@ export async function testMediavaletCalls() {
     //     }
         
     // });
-
-    console.log(["Mediavalet Call", response]);
+    const result = await response.json();
+    console.log(["Mediavalet Call", response, result]);
 }
 
 //Example API Search result from mediavalet
@@ -244,6 +457,7 @@ async function uploadAsset() {
             
 
         4. POST Assign asset to resource.
+            - note: category = folder
             uploadUrl: /uploads/:assetId/categories
             Headers: Ocp-Apim-Subscription-Key
             body: 
