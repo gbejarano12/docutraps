@@ -19,6 +19,7 @@ import { FaBars } from "react-icons/fa";
 import { testMediavaletCalls, MediaValetApi } from './model/mediavaletApi';
 import { Photos } from './view/photos';
 import { makeDBRequest } from './model/mongoDB';
+import { SurveyForm } from './view/survey';
 // import "https://survey123.arcgis.com/api/jsapi";
 
 // function App() {
@@ -250,50 +251,6 @@ function MediaValetAuth() {
   return null;
 }
 
-function SurveyForm() {
-  const [surveyForm, setForm] = React.useState(null);
-  React.useEffect(() => {
-    let survey = new window.Survey123WebForm({
-      itemId: "7b773ec3ebf149a6982255dd0b2a5e3c",
-      clientId: "1GFDSGHAfH07TlMs",
-      onFormLoaded: (surveyF, ev) => {
-        console.log(["FormLoaded", survey, survey?.getQuestions(), ev]);
-        let questionValue = survey.getQuestionValue().then(res => {
-          console.log('questionValue', res);
-        })
-      },
-      onFormSubmitted: (surveySubmitted) => {
-        let formGlobalId = surveySubmitted.result[0]?.addResults[0].globalId;
-        let formValues = surveySubmitted.surveyFeatureSet?.features[0];
-        let insertBody = {
-          _id: formGlobalId,
-          features: formValues
-        }
-        let dbInsert = makeDBRequest('POST', '/surveysSubmitted', insertBody).then(res => {
-          console.log('DB Insert', res, insertBody);
-        });
-        
-        console.log(['Form Submitted', surveySubmitted, formValues, formGlobalId]);
-      }
-    });
-    survey.options.container = "formDiv";
-    setForm(survey);
 
-    console.log(survey);
-
-    return () => {
-      console.log("Clear");
-      survey.options.container = null;
-      console.log($("#formDiv"));
-    };
-  }, []);
-
-  const questions = React.useMemo(() => {
-    let questions = surveyForm?.getQuestions();
-    console.log([questions]);
-  }, [surveyForm]);
-
-  return <Box id="formDiv" display="contents"></Box>;
-}
 
 export default App;

@@ -18,17 +18,22 @@ code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
 
 const mediaValetApiUrl = 'https://api.mediavalet.com';
 
-async function makeRequest(method, url, body) {
+async function makeRequest(method, url, body, extraHeaders={}) {
     let accessToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjA0MUIwMUQ1OTg1ODI4MzcwNTI2Qjk5Rjc2MjgyNkIyNUM3QkE2ODciLCJ0eXAiOiJKV1QiLCJ4NXQiOiJCQnNCMVpoWUtEY0ZKcm1mZGlnbXNseDdwb2MifQ.eyJuYmYiOjE2NjAxMTA1MTgsImV4cCI6MTY2MDExMDgxOCwiaXNzIjoiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20vcmVzb3VyY2VzIiwiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCJdLCJjbGllbnRfaWQiOiI3ZjQ5NWYxZi0yMWRjLTRmOWItOTA3MS00YjU2ZTUzNzVlOWYiLCJzdWIiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsImF1dGhfdGltZSI6MTY2MDA3Njg0OSwiaWRwIjoibG9jYWwiLCJhcGlfdXJpIjoiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCIsIlBlcm1pc3Npb25zIjoiW3tcIlNlY3VyYWJsZU9iamVjdFR5cGVcIjo5LFwiT2JqZWN0SWRcIjpcIjAzY2JhMjdlLTI1ZTctNGJjNi1iYjU0LWJjMjY5MWQ1MmQxYlwiLFwiUGVybWlzc2lvbnNcIjozMDI0OTkzMjA5Njk3NjMwOTIzLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjAsXCJPYmplY3RJZFwiOlwiMzZhMmMyMzgtNTY0NC00YzU0LTlkZDUtYmE0NmFlM2E4NGJmXCIsXCJQZXJtaXNzaW9uc1wiOjEyMjQ4MzY1MjQ2NTUyNDA2NzMxLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjEsXCJPYmplY3RJZFwiOlwiZTAzN2JjYzQtOTM3Ni00ZGMwLTgwYWYtMjRmYTUxODEzYjI5XCIsXCJQZXJtaXNzaW9uc1wiOjMwMjQ5OTMyMDk2OTc2MzA5MjMsXCJQZXJtaXNzaW9uczJcIjoxfV0iLCJSb2xlSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwiVXNlck9yZ1VuaXRJZCI6IlwiMDNjYmEyN2UtMjVlNy00YmM2LWJiNTQtYmMyNjkxZDUyZDFiXCIiLCJVc2VyTmFtZSI6ImJlamFyYW5vX2d1c3Rhdm9AeWFob28uY29tIiwiRW1haWwiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsIlVzZXJJZCI6IlwiMDViYTA4NjUtYzk5ZC00NWU5LTkxNzAtYmNlNTBhY2NhMTI5XCIiLCJTSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwic2NvcGUiOlsib3BlbmlkIiwiYXBpIl0sImFtciI6WyJwd2QiXX0.LBmfQD9kkDcw654Scnu8eTFu9yNMHIT4ICRdJTbs0rrlxJwvVc098fetnOm6cziTzMj0nH0OQ3rAbR91HXxsObMH0Nvs6T0i1MSBDrJ9RFo8EKqEby4-mM4gob21rijnePTaCfBgLgUZrj8BmemOu4WA7YLeM-anzSpZZ3o-Sa7AYveExRjbd3H9Z5Q1RsX9bmP9Fc7ySfiKx_3xPtZY-nAsKZ5w_0YR7mJjC0R104u9Mmghx1Drf6eABzn5U19K8xhOLpGzjrv__-e7q2LD8dEcSR-IN4VHXM8WuHzzUToJku-q0GR2qgxhKSMVzug44F-_SZP3-HjgL1fBrI86AUAg9o06Qo3pVK_aREb0Nvy25bmu0zIroYLhe4RU2XLL2A1O4pFQoi62V_ibau6-AY_Erm4nKwg5vKEv6IbDKlMgI_kwXvhO9gZEIJx3aNdX6ojmtw_cOgKhKhGSOBnQp0QblMb2jAUdE-kFOzi2TQazer0VMdXiissGcs2Ji2YCQDwkKLoDfSsDgvUpQOBSojgWBEhx-aHzArbZYlCtTSWLoidbxZHb3r15TD0g6zlUVgsyk_J53S0YHXF1L7EtwRfZEY5-dNwPnjq6bsvlkg4o3x07HdPvGC5wM6kIIrhuE1L1K00tD554_1Gp8M6Pk1jsdf0ru2vchUrkSLvnPeU";
     let subscriptionKey = '03e0a3d8270a432d9ede6e2cfca073dd'; // put in env
 
+    let headers = {};
+    let baseHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+        'Ocp-Apim-Subscription-Key': subscriptionKey
+    };
+
+    Object.assign(headers, baseHeaders, extraHeaders);
+
     let requestOptions = {
         method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-            'Ocp-Apim-Subscription-Key': subscriptionKey
-        }
+        headers: headers
     };
 
     if (Boolean(body)) {
@@ -91,6 +96,53 @@ export class MediaValetApi {
         let result = await makeRequest('POST', url, body);
         result = new MediaValetCategory(result);
         console.log('CREATE CATEGORY', result);
+        return result;
+    }
+
+    async requestUploadUrl(filename) {
+        let url = `/uploads`;
+        let body = { filename: filename };
+        let result = await makeRequest('POST', url, body);
+        console.log('REQUEST UPLOAD URL', result);
+        return result;
+    }
+
+    async uploadFile(uploadUrl, file) {
+        let url = uploadUrl;
+        let body = file;
+        let headers = {'x-ms-blob-type': 'BlockBlob'};
+        let result = await makeRequest('PUT', url, body, headers);
+        console.log("UPLOAD FILE", result);
+        return result;
+    }
+
+    async putAttributes(assetId, attributes) {
+        let url = `/uploads/${assetId}`;
+        let body = attributes;
+        // {
+        //     "filename": "<assetFilename>",
+        //     "title": "<assetTitle>",
+        //     "description": "<assetDescription>",
+        //     "fileSizeInBytes": "<fileSizeInBytes>"
+        // }
+        let result = await makeRequest('PUT', url, body);
+        console.log("PUT ATTRIBUTES", result);
+        return result;
+    }
+
+    async assignUploadCategory(assetId, categories) {
+        let url = `/uploads/${assetId}/categories`;
+        let body = categories;
+        let result = await makeRequest('POST', url, body);
+        console.log("ASSIGN Categories", result);
+        return result;
+    }
+
+    async finalizeUpload(assetId) {
+        let url = `/uploads/${assetId}`;
+        let body = [{"op":"replace","path":"/status","value":1}];
+        let result = await makeRequest('PATCH', url, body);
+        console.log("FINALIZE UPLOAD", result);
         return result;
     }
 }

@@ -5,6 +5,9 @@ import { Box, Stack, Flex, Heading, Text, Link as ChakraLink, Button, Drawer, Dr
 import { Route, Routes, Link, useParams } from "react-router-dom";
 import { MediaValetApi, MediaValetCategory } from '../model/mediavaletApi';
 import { Survey } from '../model/survey';
+import { CameraArray } from '../model/camera';
+import { makeDBRequest } from '../model/mongoDB';
+import moment from 'moment';
 
 export function Photos() {
     return (
@@ -72,10 +75,11 @@ export function MediaValetFolders() {
               <Box>
                 <Heading size='sm' color='gray.600'>SubFolders</Heading>
               </Box>
-              <Box>
+              <Stack direction='row'>
                 <Button variant='outline' size='sm' colorScheme='blue' onClick={setFolderCreate.on}>+ Folder</Button>
+                <UploadPhotosModal />
                 <FolderCreateDrawer isOpen={folderCreateIsOpen} onClose={setFolderCreate.off} parentCategory={parentCategory} onSubmit={createFolder} />
-              </Box>
+              </Stack>
             </Stack>
             <Box bg='white' borderRadius='lg' p={3}>
               <Stack>
@@ -319,5 +323,153 @@ function LinkModal(props) {
         </ModalFooter>
       </ModalContent>
     </Modal>
+  )
+}
+
+function UploadPhotosModal(props) {
+  const [modalIsOpen, setModalOpen] = useBoolean();
+  const [form, setForm] = React.useState(null);
+  const [coordinates, setCoordinates] = React.useState(null);
+  const [loadingSurvey, setSurveyLoading] = useBoolean(true);
+  const [allCameras, setAllCameras] = React.useState(null);
+  const [surveyCamera, setSurveyCamera] = React.useState(null);
+  const [setupDate, setSetupDate] = React.useState(null);
+  const [step, setStep] = React.useState(0);
+  const [surveyUsed, setSurveyUsed] = React.useState(null);
+
+  const handleFormLoad = async () => {
+    let formId = surveyUsed._id
+    setSurveyLoading.off();
+    let survey = await new window.Survey123WebForm({
+      itemId: "7b773ec3ebf149a6982255dd0b2a5e3c",
+      clientId: "1GFDSGHAfH07TlMs",
+      globalId: formId,
+      mode: 'edit',
+      container: `surveyDiv`,
+      onFormLoaded: (surveyF) => {
+        console.log(["Loaded Survey", survey, survey?.getQuestions()]);
+        let questionValue = survey.getQuestionValue().then(res => {
+          console.log('questionValues', res);
+          setCoordinates(res.gps_coordinates_of_the_camera_l);
+          setSurveyLoading.on();
+        })
+       
+        setForm(survey);
+      }
+    });
+    
+  }
+
+  const loadAllCameras = async () => {
+    let allCameras = new CameraArray();
+    allCameras = await allCameras.loadAllCameras();
+    setAllCameras(allCameras);
+  }
+
+  const loadSubmittedSurvey = async (camera) => {
+    let filteredSurveys = await makeDBRequest('GET', 
+      `/surveysSubmitted?filter={"features.attributes.camera_id":"${camera.cameraId}", "features.attributes._procedure":"New camera placement"}
+      &sort={"features.attributes.date_and_time_of_camera_setup_o":-1}`
+    );
+    console.log('Filtered Surveys', filteredSurveys);
+
+    if (filteredSurveys.length > 0) {
+      let cameraSetupDate = filteredSurveys[0].features.attributes.date_and_time_of_camera_setup_o;
+      cameraSetupDate = new Date(cameraSetupDate);
+      cameraSetupDate = moment(cameraSetupDate).format('M_D_YYYY');
+      setSurveyUsed(filteredSurveys[0]);
+      setSetupDate(cameraSetupDate);
+    }
+  }
+
+  React.useEffect(
+    () => {
+      loadAllCameras();
+    }, []
+  )
+
+  React.useEffect(
+    () => {
+      loadSubmittedSurvey(surveyCamera);
+    }, [surveyCamera, surveyCamera?.cameraId]
+  )
+
+  React.useEffect(
+    () => {
+      if (step === 2) {
+        handleFormLoad();
+      }
+    }, [step]
+  )
+
+  // 387048b3-86f1-4b99-81b9-46d39f22ca71
+  const handleSubmit = () => {
+    console.log('Submit Linking');
+    //props.onSubmit(coordinates);
+  }
+  return (
+    <>
+      <Button size='sm' colorScheme='blue' onClick={setModalOpen.on} >Upload</Button>
+      <Modal isOpen={modalIsOpen} onClose={setModalOpen.off} size='lg'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload Photos</ModalHeader>
+          <ModalBody>
+            <Stack p={3}>
+              
+              {step === 0 &&
+                allCameras?.map((camera, i) => (
+                  <Flex w="full" p={3} _hover={{ bg: "blackAlpha.100" }} justifyContent="space-between" 
+                    onClick={() => {setStep(step + 1); setSurveyCamera(camera); }}
+                  >
+                    <Heading size="sm" color="gray.600">
+                      {camera.cameraId}
+                    </Heading>
+                  </Flex>
+                ))
+              }
+
+              {step === 1 &&
+                <Box>
+                  <Heading size='sm' color='gray.600'>{surveyCamera.cameraId}_{setupDate}</Heading>
+
+                </Box>
+              }
+
+              {step === 2 &&
+                <Flex w='full'>
+                  <Box flex={1}>
+                    <Text color='gray.500'>Coordinates: </Text>
+                  </Box>
+                  <Box flex={2}>
+                    <Skeleton isLoaded={loadingSurvey}>
+                      <Text color='gray.600'>Lat: {coordinates?.y.toFixed(4)}, Lon: {coordinates?.x?.toFixed(4)}</Text>
+                    </Skeleton>
+                  </Box>
+                </Flex>
+              }
+
+            </Stack>
+            <Box id='surveyDiv' hidden={true}></Box>
+          </ModalBody>
+
+          <ModalFooter>
+            {(step > 0 && step < 5) &&
+              <Stack direction='row'>
+                <Button variant='outline' onClick={() => {if (step !== 0) {setStep(step - 1)}}}>Previous</Button>
+                <Button colorScheme='blue' onClick={() => {setStep(step + 1)}}>Next</Button>
+              </Stack>
+            }
+            {step === 5 &&
+              <Stack direction='row'>
+                <Button variant='outline' mr={3} onClick={setModalOpen.off}>Cancel</Button>
+                <Button colorScheme='blue' onClick={handleSubmit}>Submit</Button>
+              </Stack>
+            }
+            
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }

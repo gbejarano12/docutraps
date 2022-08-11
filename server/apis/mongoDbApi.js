@@ -24,9 +24,9 @@ async function connectDB() {
     client.close();
 }
 
-async function getCollection(collectionName, params={}, res=false) {
+async function getCollection(collectionName, params={}, sort={}, res=false) {
     let collection = await initCollection(collectionName);
-    let result = await collection.find(params).toArray();
+    let result = await collection.find(params).sort(sort).toArray();
     if (Boolean(res)) {
         res.send(result);
     } else {
@@ -61,7 +61,11 @@ router.post('/surveys', async function(req, res, next) {
 
 router.get('/surveysSubmitted', async function(req, res, next) {
     // To Do: Get params from req.query
-    let surveyResult = await getCollection('surveysSubmitted');
+    let filterParam = req.query.filter;
+    let filter = (Boolean(filterParam) ? JSON.parse(filterParam) : {});
+    let sortParam = req.query.sort;
+    let sort = (Boolean(sortParam) ? JSON.parse(sortParam) : {});
+    let surveyResult = await getCollection('surveysSubmitted', filter, sort);
     res.send(surveyResult);
 });
 
@@ -73,6 +77,9 @@ router.post('/surveysSubmitted', async function(req, res, next) {
 
 router.get('/cameras', async function(req, res, next) {
     // To Do: Get params from req.query
+    // let filterParam = req.query.filter;
+    // let filter = {filterParam};
+
     let cameraResult = await getCollection('cameras');
     res.send(cameraResult);
 });
