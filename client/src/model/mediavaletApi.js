@@ -18,11 +18,11 @@ code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
 
 const mediaValetApiUrl = 'https://api.mediavalet.com';
 
-async function makeRequest(method, url, body, extraHeaders={}) {
+async function makeRequest(method, url, body, extraHeaders={}, fileUpload) {
 
     let accessToken = '';
     if (process.env.NODE_ENV === 'development') {
-        accessToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjA0MUIwMUQ1OTg1ODI4MzcwNTI2Qjk5Rjc2MjgyNkIyNUM3QkE2ODciLCJ0eXAiOiJKV1QiLCJ4NXQiOiJCQnNCMVpoWUtEY0ZKcm1mZGlnbXNseDdwb2MifQ.eyJuYmYiOjE2NjAyNzQxMjAsImV4cCI6MTY2MDI3NDQyMCwiaXNzIjoiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20vcmVzb3VyY2VzIiwiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCJdLCJjbGllbnRfaWQiOiI3ZjQ5NWYxZi0yMWRjLTRmOWItOTA3MS00YjU2ZTUzNzVlOWYiLCJzdWIiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsImF1dGhfdGltZSI6MTY2MDI3NDExOCwiaWRwIjoibG9jYWwiLCJhcGlfdXJpIjoiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCIsIlBlcm1pc3Npb25zIjoiW3tcIlNlY3VyYWJsZU9iamVjdFR5cGVcIjo5LFwiT2JqZWN0SWRcIjpcIjAzY2JhMjdlLTI1ZTctNGJjNi1iYjU0LWJjMjY5MWQ1MmQxYlwiLFwiUGVybWlzc2lvbnNcIjozMDI0OTkzMjA5Njk3NjMwOTIzLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjAsXCJPYmplY3RJZFwiOlwiMzZhMmMyMzgtNTY0NC00YzU0LTlkZDUtYmE0NmFlM2E4NGJmXCIsXCJQZXJtaXNzaW9uc1wiOjEyMjQ4MzY1MjQ2NTUyNDA2NzMxLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjEsXCJPYmplY3RJZFwiOlwiZTAzN2JjYzQtOTM3Ni00ZGMwLTgwYWYtMjRmYTUxODEzYjI5XCIsXCJQZXJtaXNzaW9uc1wiOjMwMjQ5OTMyMDk2OTc2MzA5MjMsXCJQZXJtaXNzaW9uczJcIjoxfV0iLCJSb2xlSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwiVXNlck9yZ1VuaXRJZCI6IlwiMDNjYmEyN2UtMjVlNy00YmM2LWJiNTQtYmMyNjkxZDUyZDFiXCIiLCJVc2VyTmFtZSI6ImJlamFyYW5vX2d1c3Rhdm9AeWFob28uY29tIiwiRW1haWwiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsIlVzZXJJZCI6IlwiMDViYTA4NjUtYzk5ZC00NWU5LTkxNzAtYmNlNTBhY2NhMTI5XCIiLCJTSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwic2NvcGUiOlsib3BlbmlkIiwiYXBpIl0sImFtciI6WyJwd2QiXX0.UcH_uDdXNzSffsnenUnXn2oN5bZ_MuwOsbxRPksZm4vMHwNVp8RvgzfV9tLylLF_lJb9P0oh2-PMGnSmz2izm4zk-6FRfQB8p2_NQlbyF6sfuSEHWi5Wp_9ulpogShDFz6QKKSeJa4KwKZt_aymK2db9LJ7RRtacnqkjDEKK-FzZIYtEmMFSjvzA8iX7tY3WGkuSxUtVNw8FP53O5bEooOb3rZf8sldBLSywwrITSnPnba0txXX1zvJ-vKOgWPeXPz12kEbbuxb-qrtkevauh7FuXlWXgp82cfdcpeQJHIHeNufxv3mBX1WiDWU8FUzWtPvO_JQGKFa3gixlC4UswM6BDxzH5qscVKf_5gSbPtEkhb3eU8tvqoybUqCfQ8YpvrW7HGIoDCk0XNcRPlXManG_5G3IwISLNK0gG9tV5PPusDBb0zDd3zvbF7NO0zSp-d9wakNI4UqhfAHR9ruqF0Z0P42FTgp2jS8z1ul_O_fGXa4Y66Lv4liSwjCgLEJ0gl240DtjDRz7kng8o_8oV-50aUTJzO4oiKS-VX1_1US8SstgtPStVc22F6cPhSytqP0oJHESlg_itSXWIvM9x0yn_g-Vbj2R6BJQlxyPOG6cHTEFNEV1YHgGV-skmjbWwm_tg_tT4B5WC7DgxiMxwGdTFQtJzy4A2W5W-Mf8vBU";
+        accessToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjA0MUIwMUQ1OTg1ODI4MzcwNTI2Qjk5Rjc2MjgyNkIyNUM3QkE2ODciLCJ0eXAiOiJKV1QiLCJ4NXQiOiJCQnNCMVpoWUtEY0ZKcm1mZGlnbXNseDdwb2MifQ.eyJuYmYiOjE2NjAyOTE0NTUsImV4cCI6MTY2MDI5MTc1NSwiaXNzIjoiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20vcmVzb3VyY2VzIiwiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCJdLCJjbGllbnRfaWQiOiI3ZjQ5NWYxZi0yMWRjLTRmOWItOTA3MS00YjU2ZTUzNzVlOWYiLCJzdWIiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsImF1dGhfdGltZSI6MTY2MDI3NDExOCwiaWRwIjoibG9jYWwiLCJhcGlfdXJpIjoiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCIsIlBlcm1pc3Npb25zIjoiW3tcIlNlY3VyYWJsZU9iamVjdFR5cGVcIjo5LFwiT2JqZWN0SWRcIjpcIjAzY2JhMjdlLTI1ZTctNGJjNi1iYjU0LWJjMjY5MWQ1MmQxYlwiLFwiUGVybWlzc2lvbnNcIjozMDI0OTkzMjA5Njk3NjMwOTIzLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjAsXCJPYmplY3RJZFwiOlwiMzZhMmMyMzgtNTY0NC00YzU0LTlkZDUtYmE0NmFlM2E4NGJmXCIsXCJQZXJtaXNzaW9uc1wiOjEyMjQ4MzY1MjQ2NTUyNDA2NzMxLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjEsXCJPYmplY3RJZFwiOlwiZTAzN2JjYzQtOTM3Ni00ZGMwLTgwYWYtMjRmYTUxODEzYjI5XCIsXCJQZXJtaXNzaW9uc1wiOjMwMjQ5OTMyMDk2OTc2MzA5MjMsXCJQZXJtaXNzaW9uczJcIjoxfV0iLCJSb2xlSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwiVXNlck9yZ1VuaXRJZCI6IlwiMDNjYmEyN2UtMjVlNy00YmM2LWJiNTQtYmMyNjkxZDUyZDFiXCIiLCJVc2VyTmFtZSI6ImJlamFyYW5vX2d1c3Rhdm9AeWFob28uY29tIiwiRW1haWwiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsIlVzZXJJZCI6IlwiMDViYTA4NjUtYzk5ZC00NWU5LTkxNzAtYmNlNTBhY2NhMTI5XCIiLCJTSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwic2NvcGUiOlsib3BlbmlkIiwiYXBpIl0sImFtciI6WyJwd2QiXX0.O7AhDxH0B4yyYiJpuxYSMR5XbBYAHoBC-aAwmMUe7dzuLj-Egri9nn2Cap5uEcg6cU_s-N2Ou46Hg0HsztGz9YgfFTFO7zIFXU8_sr2h_d1s4AcyYeU74S7tILY8HPpUINJ7X4E_Uk3zj2Ye2mO7e5-a6Peyt3YQ0TaI-fQGnLbIfBB5q2Y5oX-DtRwRnJhPoN82LNF54AKSVBQ8gksU66AIA_ZEtU1i0x024ywt0VLL3r8APrYO88qd1wXJHYd5jfz1OXAI0vdgsZUhykTjrfFkt_8gavGm__9tNHrQd5iAjaegJgZDOxwTAoFsc-Wc6ngptLW8RV1f1Cv0dx_37kAUQyMoSsGu9KbzW9sLaj1SY2Ov7lE3L_xgEOGH_DCB8j9Xye_LrudIKMFByTsbmqGUKz6FoyxpTiUUagw0MDcA_NpOJh-FT91ieAT1N2nIOTVayQUsgI2dRGLnm-MrZPG_68mnymIG0MNGg3KzcaYCYUkVP47jPrFbwj_-rPYHQH3YS_miA0PG5U0HdqtxDNjodSlK-anntcbiVvlw3deKL509p_46LJ3f6jIqbbYExKxTJeyePwC2ZYDmx3q_qjLEhn2-OAWoQsk_3Rmm8JY-e32XqRmFZjKFxvpFhugQM0uNVnGbCsipSb20au2f9q2GUEtWvMTsyZFnth0oElw";
         window.localStorage.setItem('mediaValetAccessToken', accessToken);
     } else {
         accessToken = window.localStorage.getItem('mediaValetAccessToken');
@@ -41,7 +41,11 @@ async function makeRequest(method, url, body, extraHeaders={}) {
         'Ocp-Apim-Subscription-Key': subscriptionKey
     };
 
-    Object.assign(headers, baseHeaders, extraHeaders);
+    if (fileUpload) {
+        headers = extraHeaders;
+    } else {
+        Object.assign(headers, baseHeaders, extraHeaders);
+    }
 
     let requestOptions = {
         method: method,
@@ -49,11 +53,13 @@ async function makeRequest(method, url, body, extraHeaders={}) {
     };
 
     if (Boolean(body)) {
-        body = JSON.stringify(body);
+        if (!fileUpload) {
+            body = JSON.stringify(body);
+        }
         requestOptions.body = body;
     }
 
-    let request = await fetch(mediaValetApiUrl + url, requestOptions);
+    let request = await fetch((fileUpload ? url : mediaValetApiUrl + url), requestOptions);
     
     console.log('Make Request', request.status)
     if (request.status === 401 && process.env.NODE_ENV !== 'development') {
@@ -65,10 +71,7 @@ async function makeRequest(method, url, body, extraHeaders={}) {
         }
 
     } 
-    // else {
-    //     await refreshToken();
-    // }
-    let result = await request.json();
+    let result = (fileUpload ? await request : await request.json());
     return result?.payload ?? result?.errors;
 }
 
@@ -183,7 +186,7 @@ export class MediaValetApi {
         let url = uploadUrl;
         let body = file;
         let headers = {'x-ms-blob-type': 'BlockBlob'};
-        let result = await makeRequest('PUT', url, body, headers);
+        let result = await makeRequest('PUT', url, body, headers, true);
         console.log("UPLOAD FILE", result);
         return result;
     }
@@ -216,6 +219,36 @@ export class MediaValetApi {
         let result = await makeRequest('PATCH', url, body);
         console.log("FINALIZE UPLOAD", result);
         return result;
+    }
+
+    async uploadAssetFullSteps(file, category, coordinates) {
+        //Step 1
+        let requestUrlRes = await this.requestUploadUrl(file.name);
+        
+        //Step 2
+        let uploadUrl = requestUrlRes?.uploadUrl;
+        let uploadFileRes = await this.uploadFile(uploadUrl, file);
+
+        //Step 3
+        let assetId = requestUrlRes?.id;
+        let attributes = {
+            filename: file.name,
+            title: file.name,
+            description: '',
+            fileSizeInBytes: file.size
+        };
+        let addAttributeRes = await this.putAttributes(assetId, attributes);
+         
+        //Step 4
+        let categories = [category.id];
+        let assignCategoryRes = await this.assignUploadCategory(assetId, categories);
+
+        //Step 5
+        let finalizeRes = await this.finalizeUpload(assetId);
+        let newAsset = new MediaValetAsset();
+        newAsset.id = assetId;
+        await newAsset.updateAttribute('c0c67677-b8eb-4522-844b-a4aeb9be7807', coordinates.x);
+        await newAsset.updateAttribute('6ce37da1-e78f-426a-9505-671fe9161272', coordinates.y);
     }
 }
 

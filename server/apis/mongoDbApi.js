@@ -4,7 +4,11 @@ const { MongoClient } = require('mongodb');
 const { v4 } = require('uuid');
 
 
-const uri = `mongodb+srv://${process.env.APPSETTING_MONGO_DB_USERNAME}:${process.env.APPSETTING_MONGO_DB_PASSWORD}@${process.env.APPSETTING_MONGO_DB_CLUSTER}.letvwla.mongodb.net/?retryWrites=true&w=majority`;
+const APPSETTING_MONGO_DB_USERNAME='gustavob'
+const APPSETTING_MONGO_DB_PASSWORD='xFdfhnEX6fPjhogu'
+const APPSETTING_MONGO_DB_CLUSTER='cluster0'
+
+const uri = `mongodb+srv://${APPSETTING_MONGO_DB_USERNAME}:${APPSETTING_MONGO_DB_PASSWORD}@${APPSETTING_MONGO_DB_CLUSTER}.letvwla.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 
 

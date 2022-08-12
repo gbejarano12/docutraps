@@ -34,6 +34,7 @@ export function SurveyForm() {
   const [surveyForm, setForm] = React.useState(null);
   const [allCameras, setAllCameras] = React.useState(null);
   const [surveyCamera, setSurveyCamera] = React.useState(null);
+  const [submittedSurveyAnswers, setSubmittedSurveyAnswers] = React.useState(null);
 
   const loadCameras = async () => {
     let allCameras = new CameraArray();
@@ -54,6 +55,24 @@ export function SurveyForm() {
     setSurveyCamera(camera);
     
 
+  }
+
+  const loadSubmittedSurvey = async (submittedSurveyId) => {
+    let survey = await new window.Survey123WebForm({
+      itemId: "7b773ec3ebf149a6982255dd0b2a5e3c",
+      clientId: "1GFDSGHAfH07TlMs",
+      globalId: submittedSurveyId,
+      mode: 'edit',
+      onFormLoaded: (surveyF, ev) => {
+        let questionValue = survey.getQuestionValue().then(res => {
+          console.log('questionValues', res);
+          setSubmittedSurveyAnswers(res);
+        });
+        
+      }
+    });
+    survey.options.container = "formDivSubmitted";
+    setForm(survey);
   }
 
   React.useEffect(() => {
@@ -122,7 +141,7 @@ export function SurveyForm() {
     }
 
     
-  }, [surveyCamera, surveyCamera?.cameraId]);
+  }, [surveyCamera, surveyCamera?.cameraId, submittedSurveyAnswers]);
 
   const questions = React.useMemo(() => {
     let questions = surveyForm?.getQuestions();
@@ -146,9 +165,9 @@ export function SurveyForm() {
                 {camera.cameraId}
               </Heading>
               <Box>
-                <Badge rounded={"md"} colorScheme={Boolean(camera.active) ? "red" : "green"} >
+                <Badge rounded={"md"} colorScheme={Boolean(camera.isActive) ? "red" : "green"} >
                   <Text>
-                    {Boolean(camera.active) ? "Active" : "Inactive"}
+                    {Boolean(camera.isActive) ? "Active" : "Inactive"}
                   </Text>
                 </Badge>
               </Box>
@@ -158,9 +177,10 @@ export function SurveyForm() {
     );
   } else {
     return (
-      
+      <>
         <Box id="formDiv" display="contents"></Box>
-      
+        <Box id='setSubmittedSurveyAnswers' hidden ></Box>
+      </>
     );
   }
 }
