@@ -54,7 +54,7 @@ async function makeRequest(method, url, body, extraHeaders={}) {
     }
 
     let request = await fetch(mediaValetApiUrl + url, requestOptions);
-    alert('Request '+ JSON.stringify(request));
+    
     console.log('Make Request', request.status)
     if (request.status === 401 && process.env.NODE_ENV !== 'development') {
         window.localStorage.setItem('lastUrl', window.location.href);
