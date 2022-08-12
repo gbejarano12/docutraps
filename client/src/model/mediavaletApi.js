@@ -64,9 +64,10 @@ async function makeRequest(method, url, body, extraHeaders={}) {
             window.location.assign('https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce');
         }
 
-    } else {
-        await refreshToken();
-    }
+    } 
+    // else {
+    //     await refreshToken();
+    // }
     let result = await request.json();
     return result?.payload ?? result?.errors;
 }
