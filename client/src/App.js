@@ -233,7 +233,14 @@ function MediaValetAuth() {
     )
 
     const response = await tokenResponse.json();
-    console.log(['Mediavalet token', response, params, formBody]);
+    console.log(['Mediavalet token', response, params, formBody, tokenResponse.status]);
+    let accessToken = response?.access_token;
+    window.localStorage.setItem('mediaValetAccessToken', accessToken);
+    let lastUrl = window.localStorage.getItem('lastUrl');
+    if (Boolean(lastUrl)) {
+      window.localStorage.removeItem('lastUrl');
+      window.location(lastUrl);
+    }
     //const { access_token, expires_in } = response; 
   }
 

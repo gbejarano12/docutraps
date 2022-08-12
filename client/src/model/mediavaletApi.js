@@ -19,7 +19,15 @@ code=__O7TY14awF7qVZ31VnaJ411BQQAZem8DQcSvIY2uh4
 const mediaValetApiUrl = 'https://api.mediavalet.com';
 
 async function makeRequest(method, url, body, extraHeaders={}) {
-    let accessToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjA0MUIwMUQ1OTg1ODI4MzcwNTI2Qjk5Rjc2MjgyNkIyNUM3QkE2ODciLCJ0eXAiOiJKV1QiLCJ4NXQiOiJCQnNCMVpoWUtEY0ZKcm1mZGlnbXNseDdwb2MifQ.eyJuYmYiOjE2NjAxMTA1MTgsImV4cCI6MTY2MDExMDgxOCwiaXNzIjoiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20vcmVzb3VyY2VzIiwiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCJdLCJjbGllbnRfaWQiOiI3ZjQ5NWYxZi0yMWRjLTRmOWItOTA3MS00YjU2ZTUzNzVlOWYiLCJzdWIiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsImF1dGhfdGltZSI6MTY2MDA3Njg0OSwiaWRwIjoibG9jYWwiLCJhcGlfdXJpIjoiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCIsIlBlcm1pc3Npb25zIjoiW3tcIlNlY3VyYWJsZU9iamVjdFR5cGVcIjo5LFwiT2JqZWN0SWRcIjpcIjAzY2JhMjdlLTI1ZTctNGJjNi1iYjU0LWJjMjY5MWQ1MmQxYlwiLFwiUGVybWlzc2lvbnNcIjozMDI0OTkzMjA5Njk3NjMwOTIzLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjAsXCJPYmplY3RJZFwiOlwiMzZhMmMyMzgtNTY0NC00YzU0LTlkZDUtYmE0NmFlM2E4NGJmXCIsXCJQZXJtaXNzaW9uc1wiOjEyMjQ4MzY1MjQ2NTUyNDA2NzMxLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjEsXCJPYmplY3RJZFwiOlwiZTAzN2JjYzQtOTM3Ni00ZGMwLTgwYWYtMjRmYTUxODEzYjI5XCIsXCJQZXJtaXNzaW9uc1wiOjMwMjQ5OTMyMDk2OTc2MzA5MjMsXCJQZXJtaXNzaW9uczJcIjoxfV0iLCJSb2xlSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwiVXNlck9yZ1VuaXRJZCI6IlwiMDNjYmEyN2UtMjVlNy00YmM2LWJiNTQtYmMyNjkxZDUyZDFiXCIiLCJVc2VyTmFtZSI6ImJlamFyYW5vX2d1c3Rhdm9AeWFob28uY29tIiwiRW1haWwiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsIlVzZXJJZCI6IlwiMDViYTA4NjUtYzk5ZC00NWU5LTkxNzAtYmNlNTBhY2NhMTI5XCIiLCJTSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwic2NvcGUiOlsib3BlbmlkIiwiYXBpIl0sImFtciI6WyJwd2QiXX0.LBmfQD9kkDcw654Scnu8eTFu9yNMHIT4ICRdJTbs0rrlxJwvVc098fetnOm6cziTzMj0nH0OQ3rAbR91HXxsObMH0Nvs6T0i1MSBDrJ9RFo8EKqEby4-mM4gob21rijnePTaCfBgLgUZrj8BmemOu4WA7YLeM-anzSpZZ3o-Sa7AYveExRjbd3H9Z5Q1RsX9bmP9Fc7ySfiKx_3xPtZY-nAsKZ5w_0YR7mJjC0R104u9Mmghx1Drf6eABzn5U19K8xhOLpGzjrv__-e7q2LD8dEcSR-IN4VHXM8WuHzzUToJku-q0GR2qgxhKSMVzug44F-_SZP3-HjgL1fBrI86AUAg9o06Qo3pVK_aREb0Nvy25bmu0zIroYLhe4RU2XLL2A1O4pFQoi62V_ibau6-AY_Erm4nKwg5vKEv6IbDKlMgI_kwXvhO9gZEIJx3aNdX6ojmtw_cOgKhKhGSOBnQp0QblMb2jAUdE-kFOzi2TQazer0VMdXiissGcs2Ji2YCQDwkKLoDfSsDgvUpQOBSojgWBEhx-aHzArbZYlCtTSWLoidbxZHb3r15TD0g6zlUVgsyk_J53S0YHXF1L7EtwRfZEY5-dNwPnjq6bsvlkg4o3x07HdPvGC5wM6kIIrhuE1L1K00tD554_1Gp8M6Pk1jsdf0ru2vchUrkSLvnPeU";
+
+    let accessToken = '';
+    if (process.env.NODE_ENV === 'development') {
+        accessToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjA0MUIwMUQ1OTg1ODI4MzcwNTI2Qjk5Rjc2MjgyNkIyNUM3QkE2ODciLCJ0eXAiOiJKV1QiLCJ4NXQiOiJCQnNCMVpoWUtEY0ZKcm1mZGlnbXNseDdwb2MifQ.eyJuYmYiOjE2NjAyNzQxMjAsImV4cCI6MTY2MDI3NDQyMCwiaXNzIjoiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20iLCJhdWQiOlsiaHR0cHM6Ly9pYW0ubWVkaWF2YWxldC5jb20vcmVzb3VyY2VzIiwiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCJdLCJjbGllbnRfaWQiOiI3ZjQ5NWYxZi0yMWRjLTRmOWItOTA3MS00YjU2ZTUzNzVlOWYiLCJzdWIiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsImF1dGhfdGltZSI6MTY2MDI3NDExOCwiaWRwIjoibG9jYWwiLCJhcGlfdXJpIjoiaHR0cHM6Ly9hcGktdXN2YS5tZWRpYXZhbGV0Lm5ldCIsIlBlcm1pc3Npb25zIjoiW3tcIlNlY3VyYWJsZU9iamVjdFR5cGVcIjo5LFwiT2JqZWN0SWRcIjpcIjAzY2JhMjdlLTI1ZTctNGJjNi1iYjU0LWJjMjY5MWQ1MmQxYlwiLFwiUGVybWlzc2lvbnNcIjozMDI0OTkzMjA5Njk3NjMwOTIzLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjAsXCJPYmplY3RJZFwiOlwiMzZhMmMyMzgtNTY0NC00YzU0LTlkZDUtYmE0NmFlM2E4NGJmXCIsXCJQZXJtaXNzaW9uc1wiOjEyMjQ4MzY1MjQ2NTUyNDA2NzMxLFwiUGVybWlzc2lvbnMyXCI6MX0se1wiU2VjdXJhYmxlT2JqZWN0VHlwZVwiOjEsXCJPYmplY3RJZFwiOlwiZTAzN2JjYzQtOTM3Ni00ZGMwLTgwYWYtMjRmYTUxODEzYjI5XCIsXCJQZXJtaXNzaW9uc1wiOjMwMjQ5OTMyMDk2OTc2MzA5MjMsXCJQZXJtaXNzaW9uczJcIjoxfV0iLCJSb2xlSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwiVXNlck9yZ1VuaXRJZCI6IlwiMDNjYmEyN2UtMjVlNy00YmM2LWJiNTQtYmMyNjkxZDUyZDFiXCIiLCJVc2VyTmFtZSI6ImJlamFyYW5vX2d1c3Rhdm9AeWFob28uY29tIiwiRW1haWwiOiJiZWphcmFub19ndXN0YXZvQHlhaG9vLmNvbSIsIlVzZXJJZCI6IlwiMDViYTA4NjUtYzk5ZC00NWU5LTkxNzAtYmNlNTBhY2NhMTI5XCIiLCJTSWQiOiJcImQ1NzY0ZWQyLTVmOTUtNDY1Zi1hZmVlLWRkNzI2ZGVkZGNmM1wiIiwic2NvcGUiOlsib3BlbmlkIiwiYXBpIl0sImFtciI6WyJwd2QiXX0.UcH_uDdXNzSffsnenUnXn2oN5bZ_MuwOsbxRPksZm4vMHwNVp8RvgzfV9tLylLF_lJb9P0oh2-PMGnSmz2izm4zk-6FRfQB8p2_NQlbyF6sfuSEHWi5Wp_9ulpogShDFz6QKKSeJa4KwKZt_aymK2db9LJ7RRtacnqkjDEKK-FzZIYtEmMFSjvzA8iX7tY3WGkuSxUtVNw8FP53O5bEooOb3rZf8sldBLSywwrITSnPnba0txXX1zvJ-vKOgWPeXPz12kEbbuxb-qrtkevauh7FuXlWXgp82cfdcpeQJHIHeNufxv3mBX1WiDWU8FUzWtPvO_JQGKFa3gixlC4UswM6BDxzH5qscVKf_5gSbPtEkhb3eU8tvqoybUqCfQ8YpvrW7HGIoDCk0XNcRPlXManG_5G3IwISLNK0gG9tV5PPusDBb0zDd3zvbF7NO0zSp-d9wakNI4UqhfAHR9ruqF0Z0P42FTgp2jS8z1ul_O_fGXa4Y66Lv4liSwjCgLEJ0gl240DtjDRz7kng8o_8oV-50aUTJzO4oiKS-VX1_1US8SstgtPStVc22F6cPhSytqP0oJHESlg_itSXWIvM9x0yn_g-Vbj2R6BJQlxyPOG6cHTEFNEV1YHgGV-skmjbWwm_tg_tT4B5WC7DgxiMxwGdTFQtJzy4A2W5W-Mf8vBU";
+        window.localStorage.setItem('mediaValetAccessToken', accessToken);
+    } else {
+        accessToken = window.localStorage.getItem('mediaValetAccessToken');
+    }
+    
     let subscriptionKey = '03e0a3d8270a432d9ede6e2cfca073dd'; // put in env
 
     let headers = {};
@@ -42,9 +50,58 @@ async function makeRequest(method, url, body, extraHeaders={}) {
     }
 
     let request = await fetch(mediaValetApiUrl + url, requestOptions);
-    
+    console.log('Make Request', request.status)
+    if (request.status === 401 && process.env.NODE_ENV !== 'development') {
+        window.localStorage.setItem('lastUrl', window.location.href);
+        // window.location('https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce');
+        await refreshToken();
+
+    } else {
+        await refreshToken();
+    }
     let result = await request.json();
     return result?.payload ?? result?.errors;
+}
+
+async function refreshToken() {
+    let url = `https://login.mediavalet.com/connect/token`;
+    let headers = {
+        Host: 'login.mediavalet.com',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'cache-control': 'no-cache'
+    };
+
+    let params = {
+        grant_type:'refresh_token',
+        refresh_token: window.localStorage.getItem('mediaValetAccessToken'),
+        client_id: '7f495f1f-21dc-4f9b-9071-4b56e5375e9f',
+        client_secret: '86hVfmmct24ydSqAmBhdArCMw3fSz92kPL814ZWoeYw='
+      };
+  
+    var formBody = [];
+    for (var property in params) {
+    var encodedKey = encodeURIComponent(property);
+    var encodedValue = params[property];
+    formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+    console.log(['Refresh token', params, formBody]);
+    let tokenResponse = await fetch(url, 
+        {
+          method: 'POST',
+          headers: headers,
+          body: formBody
+        }
+    );
+
+    const response = await tokenResponse.json();
+    console.log(['Mediavalet token', response, params, formBody, tokenResponse.status]);
+    window.localStorage.setItem('mediaValetAccessToken', response.access_token);
+    let lastUrl = window.localStorage.getItem('lastUrl');
+    if (Boolean(lastUrl)) {
+      window.localStorage.removeItem('lastUrl');
+      window.location(lastUrl);
+    }
 }
 
 export class MediaValetApi {

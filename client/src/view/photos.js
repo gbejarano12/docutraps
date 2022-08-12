@@ -35,7 +35,7 @@ export function MediaValetFolders() {
       }
 
       abortController = new AbortController();
-
+      console.log('Photos Component Call');
       let mediaValetApi = new MediaValetApi();
       let baseCategory = await mediaValetApi.setBaseCategory('gustavo-submission');
       setParentCategory(baseCategory);
