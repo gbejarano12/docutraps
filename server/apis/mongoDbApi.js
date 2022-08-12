@@ -34,6 +34,7 @@ async function getCollection(collectionName, params={}, sort={}, res=false) {
     if (Boolean(res)) {
         res.send(result);
     } else {
+        client.close();
         return result;
     }
 }
@@ -41,12 +42,14 @@ async function getCollection(collectionName, params={}, sort={}, res=false) {
 async function insertOne(collectionName, data, res=false) {
     let collection = await initCollection(collectionName);
     let result = await collection.insertOne(data);
+    client.close();
     return result;
 }
 
 async function updateOne(collectionName, documentId, data, res=false) {
     let collection = await initCollection(collectionName);
     let result = await collection.updateOne({ _id: documentId }, { $set: data });
+    client.close();
     return result;
 }
 
