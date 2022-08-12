@@ -53,6 +53,10 @@ async function updateOne(collectionName, documentId, data, res=false) {
     return result;
 }
 
+router.get('/', async function(req, res, next) {
+    // To Do: Get params from req.query
+    res.send('hi');
+});
 
 router.get('/surveys', async function(req, res, next) {
     // To Do: Get params from req.query
