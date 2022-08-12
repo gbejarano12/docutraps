@@ -104,11 +104,17 @@ async function refreshToken() {
 
     const response = await tokenResponse.json();
     console.log(['Mediavalet token', response, params, formBody, tokenResponse.status]);
-    window.localStorage.setItem('mediaValetAccessToken', response.access_token);
-    let lastUrl = window.localStorage.getItem('lastUrl');
-    if (Boolean(lastUrl)) {
-      window.localStorage.removeItem('lastUrl');
-      window.location.assign(lastUrl);
+    if (tokenResponse.status === 400) {
+        window.localStorage.removeItem('mediaValetAccessToken');
+        window.location.assign('https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce');
+        
+    } else {
+        window.localStorage.setItem('mediaValetAccessToken', response.access_token);
+        let lastUrl = window.localStorage.getItem('lastUrl');
+        if (Boolean(lastUrl)) {
+            window.localStorage.removeItem('lastUrl');
+            window.location.assign(lastUrl);
+        }
     }
 }
 
