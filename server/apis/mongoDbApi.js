@@ -4,11 +4,12 @@ const { MongoClient } = require('mongodb');
 const { v4 } = require('uuid');
 
 
-const APPSETTING_MONGO_DB_USERNAME='gustavob'
-const APPSETTING_MONGO_DB_PASSWORD='xFdfhnEX6fPjhogu'
-const APPSETTING_MONGO_DB_CLUSTER='cluster0'
+// const APPSETTING_MONGO_DB_USERNAME='gustavob'
+// const APPSETTING_MONGO_DB_PASSWORD='xFdfhnEX6fPjhogu'
+// const APPSETTING_MONGO_DB_CLUSTER='cluster0'
 
-const uri = `mongodb+srv://${APPSETTING_MONGO_DB_USERNAME}:${APPSETTING_MONGO_DB_PASSWORD}@${APPSETTING_MONGO_DB_CLUSTER}.letvwla.mongodb.net/?retryWrites=true&w=majority`;
+//const uri = `mongodb+srv://${APPSETTING_MONGO_DB_USERNAME}:${APPSETTING_MONGO_DB_PASSWORD}@${APPSETTING_MONGO_DB_CLUSTER}.letvwla.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.CUSTOMCONNSTR_MONGODB_CONNECTION;
 const client = new MongoClient(uri);
 
 
@@ -55,7 +56,7 @@ async function updateOne(collectionName, documentId, data, res=false) {
 
 router.get('/', async function(req, res, next) {
     // To Do: Get params from req.query
-    res.send('hi');
+    res.send(process.env);
 });
 
 router.get('/surveys', async function(req, res, next) {
