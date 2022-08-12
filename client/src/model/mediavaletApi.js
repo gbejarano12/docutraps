@@ -26,6 +26,10 @@ async function makeRequest(method, url, body, extraHeaders={}) {
         window.localStorage.setItem('mediaValetAccessToken', accessToken);
     } else {
         accessToken = window.localStorage.getItem('mediaValetAccessToken');
+        if (!Boolean(accessToken) && accessToken === 'undefined' ) {
+            window.location.assign('https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce');
+        
+        } 
     }
     
     let subscriptionKey = '03e0a3d8270a432d9ede6e2cfca073dd'; // put in env
@@ -53,7 +57,7 @@ async function makeRequest(method, url, body, extraHeaders={}) {
     console.log('Make Request', request.status)
     if (request.status === 401 && process.env.NODE_ENV !== 'development') {
         window.localStorage.setItem('lastUrl', window.location.href);
-        if (Boolean(window.localStorage.getItem('mediaValetAccessToken'))) {
+        if (Boolean(window.localStorage.getItem('mediaValetAccessToken')) && window.localStorage.getItem('mediaValetAccessToken') !== 'undefined' ) {
             await refreshToken();
         } else {
             window.location.assign('https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce');
