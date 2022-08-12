@@ -239,7 +239,7 @@ function MediaValetAuth() {
     let lastUrl = window.localStorage.getItem('lastUrl');
     if (Boolean(lastUrl)) {
       window.localStorage.removeItem('lastUrl');
-      window.location(lastUrl);
+      window.location.assign(lastUrl);
     }
     //const { access_token, expires_in } = response; 
   }

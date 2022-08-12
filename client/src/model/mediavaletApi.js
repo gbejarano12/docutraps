@@ -53,8 +53,11 @@ async function makeRequest(method, url, body, extraHeaders={}) {
     console.log('Make Request', request.status)
     if (request.status === 401 && process.env.NODE_ENV !== 'development') {
         window.localStorage.setItem('lastUrl', window.location.href);
-        // window.location('https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce');
-        await refreshToken();
+        if (Boolean(window.localStorage.getItem('mediaValetAccessToken'))) {
+            await refreshToken();
+        } else {
+            window.location.assign('https://login.mediavalet.com/connect/authorize?client_id=7f495f1f-21dc-4f9b-9071-4b56e5375e9f&response_type=code&scope=openid%20api&redirect_uri=https://docutraps.azurewebsites.net/mediavalet/auth/callback&state=nonce');
+        }
 
     } else {
         await refreshToken();
@@ -100,7 +103,7 @@ async function refreshToken() {
     let lastUrl = window.localStorage.getItem('lastUrl');
     if (Boolean(lastUrl)) {
       window.localStorage.removeItem('lastUrl');
-      window.location(lastUrl);
+      window.location.assign(lastUrl);
     }
 }
 
