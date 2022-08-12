@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm install && node server/index.js",
-    "server": "npm install && node server/index.js",
+    "start": "node server/index.js",
+    "server": "node server/index.js",
     "client": "npm start --prefix client",
     "build": "npm install && cd client && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\""
